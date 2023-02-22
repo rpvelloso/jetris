@@ -24,13 +24,15 @@ keys = {
 
 key_events = {
     "up": (gameData) => {
-        next_degree = (gameData.degrees + 1)%4;
+        curr_degree = gameData.degrees;
+        gameData.degrees = (gameData.degrees + 1)%4;
         next_x = Math.min(gameData.x, gameData.width - gameData.getPieceWidth());
         next_y = Math.min(gameData.y, gameData.height - gameData.getPieceHeight());
         if (gameData.validMove(next_x, next_y)) {
             gameData.x = next_x;
             gameData.y = next_y;
-            gameData.degrees = next_degree;
+        } else {
+            gameData.degrees = curr_degree;
         }
     },
     "down": (gameData) => {
@@ -80,7 +82,6 @@ degrees = [0, 90, 180, -90];
 
 gameData = {
     offScreenCanvas: new OffscreenCanvas(bg_image.width, bg_image.height).getContext("2d"),
-    canvas: document.getElementById("tetris"),
     ctx: document.getElementById("tetris").getContext("2d"),
     x: rect.width*4,
     y: 0,
@@ -147,10 +148,7 @@ gameData = {
 }
 
 function gameLoop() {
-    if (key_presses.length == 0 || key_presses.slice(-1) != "down") {
-        key_presses.push("down");
-    }
-    while (key_presses.length > 1) {
+    while (key_presses.length > 0) {
         k = key_presses.shift();
         key_events[k](gameData);
     }
