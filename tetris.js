@@ -137,7 +137,7 @@ gameData = {
         document.getElementById("tst").getContext("2d").putImageData(pieceBmp, 0, gameData.delta*5);
 
         for (i = 0; i < off.data.length; i += 4) {
-            if ((pieceBmp.data[i+3] != 0 && off.data[i] != 0)) {
+            if ((pieceBmp.data[i+3] != 0 && off.data[i+3] != 0)) {
                 console.log(off.data.slice(i, i+4));
                 return false;
             }
@@ -154,9 +154,9 @@ function gameLoop() {
         k = key_presses.shift();
         key_events[k](gameData);
     }
-    if (!key_events["down"](gameData)) {
+    /*if (!key_events["down"](gameData)) {
         gameData.nextPiece();
-    }
+    }*/
     key_presses = [];
     gameData.ctx.drawImage(bg_image, 0, 0);
     gameData.ctx.drawImage(gameData.offScreenCanvas.canvas, 0, 0);
