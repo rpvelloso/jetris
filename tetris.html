@@ -1,6 +1,12 @@
 <body>
-    <canvas id="tetris" width="800" height="600"></canvas>
-    <canvas id="tst" width="800" height="600"></canvas>
+    <div>
+        <span style="position:absolute; top:0px; left:0px;">
+            Score: <input type="text" id="score" disabled="disabled" size="8"/>
+            Lines: <input type="text" id="lines" disabled="disabled" size="5"/>
+        </span>
+        <span style="position:absolute; top:30px; left:0px;">
+            <canvas id="tetris" width="800" height="600"></canvas>
+        </span>
+    </div>
     <script src="tetris.js"></script>
-    <input type="button" onclick="game.nextPiece();" value="next piece"/>
 </body>

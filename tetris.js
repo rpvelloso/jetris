@@ -32,18 +32,43 @@ const key_events = {
     "up": (game) => {
         curr_degree = game.degreesIndex;
         game.degreesIndex = (game.degreesIndex + 1)%4;
-        next_x = Math.min(game.x, game.width - game.pieceWidth);
-        next_y = Math.min(game.y, game.height - game.pieceHeight);
-        if (game.validMove(next_x, next_y)) {
-            game.x = next_x;
-            game.y = next_y;
-        } else {
-            game.degrees = curr_degree;
+        console.log(game.pieceWidth, game.pieceHeight, game.degreesIndex);
+        moveResult = game.validMove(game.x, game.y);
+        switch (moveResult) {
+            case -4: // collision
+                game.degreesIndex = curr_degree;
+                break;
+            case -1: // left side out of screen
+                next_x = 0;
+                if (game.validMove(next_x, game.y) != 0) {
+                    game.degreesIndex = curr_degree;
+                } else {
+                    game.x = next_x;
+                }
+                break;
+            case -2: // right side out of screen
+                next_x = game.width - game.pieceWidth;
+                if (game.validMove(next_x, game.y) != 0) {
+                    game.degreesIndex = curr_degree;
+                } else {
+                    game.x = next_x;
+                }
+                break;
+            case -3: // bottom out of screen
+                next_y = game.height - game.pieceHeight;
+                if (game.validMove(game.x, next_y) != 0) {
+                    game.degreesIndex = curr_degree;
+                } else {
+                    game.y = next_y;
+                }
+                break;
+            default:
+                break;
         }
     },
     "down": (game) => {
         next_y = game.y + game.delta;
-        if (game.validMove(game.x, next_y)) {
+        if (game.validMove(game.x, next_y) == 0) {
             game.y = next_y;
             return true;
         } else {
@@ -52,13 +77,13 @@ const key_events = {
     },
     "left": (game) => {
         next_x = game.x - game.delta;
-        if (game.validMove(next_x, game.y)) {
+        if (game.validMove(next_x, game.y) == 0) {
             game.x = next_x;
         }
     },
     "right": (game) => {
         next_x = game.x + game.delta;
-        if (game.validMove(next_x, game.y)) {
+        if (game.validMove(next_x, game.y) == 0) {
             game.x = next_x;
         }
     },
@@ -79,6 +104,8 @@ piecesFiles.forEach((src) => {
 });
 
 class Game {
+    static rows = 20;
+    static cols = 10;
     constructor(canvasName, width, height, rect_size, images) {
         this.ctx = document.getElementById(canvasName).getContext("2d");
         this.offScreenCanvas = new OffscreenCanvas(width, height).getContext("2d");
@@ -87,12 +114,14 @@ class Game {
         this.degreesIndex = 0;
         this.currentPieceIndex = Math.trunc(Math.random() * this.piecesImages.length);
         this.nextPieceIndex = Math.trunc(Math.random() * this.piecesImages.length);
-        this.width = rect_size*10;
-        this.height = rect_size*20;
+        this.width = rect_size*Game.cols;
+        this.height = rect_size*Game.rows;
         this.xOffset = (width % rect_size) / 2;
         this.yOffset = (height % rect_size) / 2;
         this.x = this.delta*4;
         this.y = 0;
+        this.score = 0;
+        this.rowCount = 0;
     }
 
     static degrees = [0, 90, 180, -90];
@@ -122,6 +151,7 @@ class Game {
         this.offScreenCanvas.rotate(this.rotation);
         this.offScreenCanvas.drawImage(p, -(p.width/2), -(p.height/2));
         this.offScreenCanvas.restore();
+        this.collapseCompleteLines();
         this.ctx.putImageData(
             this.offScreenCanvas.getImageData(
                 0, 0, 
@@ -134,36 +164,56 @@ class Game {
         this.degrees = 0;
     }
 
+    static scores = [0, 5, 10, 20, 40];
+    collapseCompleteLines() {
+        let lines = 0;
+        let curr_y = this.height - this.delta;
+        let off = this.offScreenCanvas.getImageData(
+            this.xOffset, this.yOffset, 
+            this.width, this.height);
+        let rowLength = off.width * 4 * this.delta;
+        for (let i = 0; i < Game.rows; ++i) {
+            let collapse = true;
+            for (let j = 0; j < Game.cols; ++j) {
+                if (off.data[(rowLength*i) + (j*this.delta*4) + 3] == 0) {
+                    collapse = false;
+                    break;
+                }
+            }
+            if (collapse) {
+                ++lines;
+                this.offScreenCanvas.putImageData(
+                    this.offScreenCanvas.getImageData(this.xOffset, this.yOffset, this.width, this.delta * i),
+                    this.xOffset, this.delta + this.yOffset)
+                this.offScreenCanvas.clearRect(this.xOffset, this.yOffset, this.width, this.delta);
+            }
+        }
+        this.score += Game.scores[lines];
+        this.rowCount += lines;
+    }
+
     validMove(xx, yy) {
         const w = this.pieceWidth;
         const h = this.pieceHeight;
-        console.log(xx, yy);
-        if (xx < 0 || xx + w > this.width) {
-            return false;
+        if (xx < 0) {
+            return -1;
+        }
+        if (xx + w > this.width) {
+            return -2;
         }
         if (yy + h > this.height) {
-            return false;
+            return -3;
         }
         const pieceBmp = this.pieceBitmap;
         const off = this.offScreenCanvas.getImageData(xx+this.xOffset, yy+this.yOffset, w, h);
 
-        document.getElementById("tst").getContext("2d").clearRect(0, 0, document.getElementById("tst").width, document.getElementById("tst").height)
-        document.getElementById("tst").getContext("2d").rect(0, 0, w+2, h+2)
-        document.getElementById("tst").getContext("2d").fill();
-        document.getElementById("tst").getContext("2d").rect(0, this.delta*5, w+2, h+2);
-        document.getElementById("tst").getContext("2d").fill();
-        document.getElementById("tst").getContext("2d").putImageData(off, 1, 1);
-        document.getElementById("tst").getContext("2d").putImageData(pieceBmp, 1, 1 + this.delta*5);
-
-        console.log(pieceBmp.width, pieceBmp.height, off.width, off.height);
-
         for (let i = 0; i < off.data.length; i += 4) {
-            if ((pieceBmp.data[i+3] != 0 && off.data[i+3] != 0)) {
-                console.log(off.data.slice(i, i+4));
-                return false;
+            if ((pieceBmp.data[i+3] > 30 && off.data[i+3] != 0)) {
+                console.log(i, off.data.slice(i, i+4), pieceBmp.data.slice(i, i+4));
+                return -4;
             }
         }
-        return true;
+        return 0;
     }
 }
 
@@ -178,9 +228,11 @@ function gameLoop() {
         k = key_presses.shift();
         key_events[k](game);
     }
-    /*if (!key_events["down"](game)) {
+    if (!key_events["down"](game)) {
         game.nextPiece();
-    }*/
+        document.getElementById("score").value = game.score;
+        document.getElementById("lines").value = game.rowCount;
+    }
     game.ctx.drawImage(bg_image, 0, 0);
     game.ctx.drawImage(game.offScreenCanvas.canvas, 0, 0);
     game.ctx.save();
