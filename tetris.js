@@ -32,14 +32,14 @@ const key_events = {
     "up": (game) => {
         curr_degree = game.degreesIndex;
         game.degreesIndex = (game.degreesIndex + 1)%4;
-        moveResult = game.validMove(game.x, game.y);
+        moveResult = game.validateMove(game.x, game.y);
         switch (moveResult) {
             case -4: // collision
                 game.degreesIndex = curr_degree;
                 break;
             case -1: // left side out of screen
                 next_x = 0;
-                if (game.validMove(next_x, game.y) != 0) {
+                if (game.validateMove(next_x, game.y) != 0) {
                     game.degreesIndex = curr_degree;
                 } else {
                     game.x = next_x;
@@ -47,7 +47,7 @@ const key_events = {
                 break;
             case -2: // right side out of screen
                 next_x = game.width - game.pieceWidth;
-                if (game.validMove(next_x, game.y) != 0) {
+                if (game.validateMove(next_x, game.y) != 0) {
                     game.degreesIndex = curr_degree;
                 } else {
                     game.x = next_x;
@@ -55,7 +55,7 @@ const key_events = {
                 break;
             case -3: // bottom out of screen
                 next_y = game.height - game.pieceHeight;
-                if (game.validMove(game.x, next_y) != 0) {
+                if (game.validateMove(game.x, next_y) != 0) {
                     game.degreesIndex = curr_degree;
                 } else {
                     game.y = next_y;
@@ -67,7 +67,7 @@ const key_events = {
     },
     "down": (game) => {
         next_y = game.y + game.delta;
-        if (game.validMove(game.x, next_y) == 0) {
+        if (game.validateMove(game.x, next_y) == 0) {
             game.y = next_y;
             return true;
         } else {
@@ -76,13 +76,13 @@ const key_events = {
     },
     "left": (game) => {
         next_x = game.x - game.delta;
-        if (game.validMove(next_x, game.y) == 0) {
+        if (game.validateMove(next_x, game.y) == 0) {
             game.x = next_x;
         }
     },
     "right": (game) => {
         next_x = game.x + game.delta;
-        if (game.validMove(next_x, game.y) == 0) {
+        if (game.validateMove(next_x, game.y) == 0) {
             game.x = next_x;
         }
     },
@@ -105,6 +105,9 @@ piecesFiles.forEach((src) => {
 class Game {
     static rows = 20;
     static cols = 10;
+    static startInterval = 600;
+    static refreshInterval = 100;
+
     constructor(canvasName, width, height, rect_size, images) {
         this.ctx = document.getElementById(canvasName).getContext("2d");
         this.offScreenCanvas = new OffscreenCanvas(width, height).getContext("2d");
@@ -121,7 +124,7 @@ class Game {
         this.y = 0;
         this.score = 0;
         this.rowCount = 0;
-        this.interval = 800;
+        this.interval = Game.startInterval;
     }
 
     static degrees = [0, 90, 180, -90];
@@ -185,9 +188,10 @@ class Game {
         }
         this.score += Game.scores[lines];
         this.rowCount += lines;
+        this.interval = Game.startInterval - 10*Math.trunc(this.rowCount/10);
     }
 
-    validMove(xx, yy) {
+    validateMove(xx, yy) {
         const w = this.pieceWidth;
         const h = this.pieceHeight;
         if (xx < 0) {
@@ -256,6 +260,4 @@ let gravity = function() {
 }
 
 let interval = setInterval(gravity, game.interval);
-let refreshInterval = setInterval(gameLoop, 100);
-
-//TODO increase speed
+let refreshInterval = setInterval(gameLoop, Game.refreshInterval);
