@@ -125,6 +125,7 @@ class Game {
         this.score = 0;
         this.rowCount = 0;
         this.interval = Game.startInterval;
+        this.level = 1;
     }
 
     static degrees = [0, 90, 180, -90];
@@ -188,7 +189,8 @@ class Game {
         }
         this.score += Game.scores[lines];
         this.rowCount += lines;
-        this.interval = Game.startInterval - 10*Math.trunc(this.rowCount/10);
+        this.level = 1 + Math.trunc(this.rowCount/10);
+        this.interval = Game.startInterval - (this.level -1)*10;
     }
 
     validateMove(xx, yy) {
