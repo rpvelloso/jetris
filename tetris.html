@@ -1,10 +1,21 @@
+
 <body>
+    <audio autoplay loop>
+        <source src="music.mp3" type="audio/mp3">
+      Your browser does not support the audio element.
+      </audio>
     <div>
-        <span style="position:absolute; top:0px; left:0px;">
+        <span style="position:absolute; top:10px; left:0px;">
             Score: <input type="text" id="score" disabled="disabled" size="8"/>
             Lines: <input type="text" id="lines" disabled="disabled" size="5"/>
         </span>
-        <span style="position:absolute; top:30px; left:0px;">
+        <span style="position:absolute; top:40px; left:210px;">
+            <fieldset>
+                <legend>Next</legend>
+                <img id="next"/>
+            </fieldset>
+        </span>
+        <span style="position:absolute; top:50px; left:0px;">
             <canvas id="tetris" width="800" height="600"></canvas>
         </span>
     </div>
