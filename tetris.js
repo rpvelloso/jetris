@@ -90,12 +90,12 @@ const key_events = {
 
 let key_presses = [];
 window.onload = function () {
-    document.getElementsByTagName('body')[0].onkeyup = function (e) {
+    document.getElementById("body").addEventListener("keydown", (e) => {
         if (keys[e.keyCode]) {
             key_presses.push(keys[e.keyCode]);
         }
-    }
-};
+    });
+}
 
 let piecesImages = [];
 piecesFiles.forEach((src) => {
