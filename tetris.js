@@ -257,3 +257,5 @@ let gravity = function() {
 
 let interval = setInterval(gravity, game.interval);
 let refreshInterval = setInterval(gameLoop, 100);
+
+//TODO increase speed
