@@ -227,6 +227,7 @@ game = new Game(
 function statsUpdate() {
     document.getElementById("score").value = game.score;
     document.getElementById("lines").value = game.rowCount;
+    document.getElementById("level").value = game.level;
     document.getElementById("next").src = piecesFiles[game.nextPieceIndex];
 }
     
