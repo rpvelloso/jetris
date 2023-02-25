@@ -35,6 +35,7 @@ const MoveStatus = {
     INVALID_BOTTOM: -3
 };
 
+// TODO put this inside Game class and call game.event here
 const key_events = {
     "up": (game) => {
         curr_degree = game.degreesIndex;
@@ -109,7 +110,7 @@ piecesFiles.forEach((src) => {
     piecesImages.push(createImage(src));
 });
 
-class Game {
+class TetrisGame {
     static rows = 20;
     static cols = 10;
     static startInterval = 600;
@@ -123,20 +124,20 @@ class Game {
         this.degreesIndex = 0;
         this.currentPieceIndex = Math.trunc(Math.random() * this.piecesImages.length);
         this.nextPieceIndex = Math.trunc(Math.random() * this.piecesImages.length);
-        this.width = rect_size*Game.cols;
-        this.height = rect_size*Game.rows;
+        this.width = rect_size*TetrisGame.cols;
+        this.height = rect_size*TetrisGame.rows;
         this.xOffset = (width % rect_size) / 2;
         this.yOffset = (height % rect_size) / 2;
         this.x = this.delta*4;
         this.y = 0;
         this.score = 0;
         this.rowCount = 0;
-        this.interval = Game.startInterval;
+        this.interval = TetrisGame.startInterval;
         this.level = 1;
     }
 
     static degrees = [0, 90, 180, -90];
-    get rotation() {return Game.degrees[this.degreesIndex] * Math.PI / 180.0;}
+    get rotation() {return TetrisGame.degrees[this.degreesIndex] * Math.PI / 180.0;}
     get X() {return this.x + this.xOffset;}
     get Y() {return this.y + this.yOffset;}
     get piece() {return this.piecesImages[this.currentPieceIndex];}
@@ -177,9 +178,9 @@ class Game {
             this.xOffset, this.yOffset, 
             this.width, this.height);
         let rowLength = off.width * 4 * this.delta;
-        for (let i = 0; i < Game.rows; ++i) {
+        for (let i = 0; i < TetrisGame.rows; ++i) {
             let collapse = true;
-            for (let j = 0; j < Game.cols; ++j) {
+            for (let j = 0; j < TetrisGame.cols; ++j) {
                 if (off.data[(rowLength*i) + (j*this.delta*4) + 3 + (rowLength/2) + (this.delta*2)] == 0) {
                     collapse = false;
                     break;
@@ -193,10 +194,10 @@ class Game {
                 this.offScreenCanvas.clearRect(this.xOffset, this.yOffset, this.width, this.delta);
             }
         }
-        this.score += Game.scores[lines];
+        this.score += TetrisGame.scores[lines];
         this.rowCount += lines;
         this.level = 1 + Math.trunc(this.rowCount/10);
-        this.interval = Game.startInterval - (this.level -1)*10;
+        this.interval = TetrisGame.startInterval - (this.level -1)*10;
     }
 
     validateMove(xx, yy) {
@@ -233,7 +234,7 @@ class Game {
     }
 }
 
-game = new Game(
+game = new TetrisGame(
     "tetris", 
     bg_image.width, bg_image.height, 
     rect.width, 
@@ -278,4 +279,4 @@ let gravity = function() {
 }
 
 let interval = setInterval(gravity, game.interval);
-let refreshInterval = setInterval(gameLoop, Game.refreshInterval);
+let refreshInterval = setInterval(gameLoop, TetrisGame.refreshInterval);
