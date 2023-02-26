@@ -284,6 +284,15 @@ class TetrisGame {
     }
 }
 
+let statsHTML = "";
+for (let i=0; i < piecesFiles.length; ++i) {
+    statsHTML = statsHTML + 
+    `<img style="position:absolute; top:${150 + i*25}px; left:210px;" width="20" height="20" src=` + piecesImages[i].src + 
+    `><input style="position:absolute; top:${150 + i*25}px; left:240px;" size=6 disabled=disabled type=text id="piece` + i + '">';
+}
+statsHTML = statsHTML + `<input style="position:absolute; top:${150 + piecesFiles.length*25}px; left:240px;" size=6 disabled=disabled type=text id="count">`;
+document.getElementById("piece_stats").innerHTML = statsHTML;
+
 game = new TetrisGame(
     document.getElementById("tetris"), 
     rect.width, 
@@ -295,6 +304,13 @@ game = new TetrisGame(
         document.getElementById("lines").value = game.rowCount;
         document.getElementById("level").value = game.level;
         document.getElementById("next").src = piecesFiles[game.nextPieceIndex];
+        const totalPieces = game.pieceCount.reduce((a, b) => a + b, 0);
+        document.getElementById("count").value = '#' + totalPieces;
+        if (totalPieces > 0) {
+            for (let i = 0; i < game.pieceCount.length; ++i) {
+                document.getElementById("piece"+i).value = (100*(game.pieceCount[i] / totalPieces)).toFixed(2) + '%';
+            }
+        }
     }
 );
 
