@@ -282,6 +282,14 @@ class TetrisGame {
         this.refreshIntervalHandler = setInterval(this.gameLoop.bind(this), TetrisGame.refreshInterval);
         this.gravityIntervalHandler = setInterval(this.gravity.bind(this), this.gravityInterval);
     }
+
+    stop() {
+        if (this.refreshIntervalHandler)
+            clearInterval(this.refreshIntervalHandler);
+
+        if (this.gravityIntervalHandler)
+            clearInterval(this.gravityIntervalHandler);
+    }
 }
 
 let statsHTML = "";
@@ -293,25 +301,31 @@ for (let i = 0; i < piecesFiles.length; ++i) {
 statsHTML = statsHTML + `<input style="position:absolute; top:${150 + piecesFiles.length * 25}px; left:240px;" size=6 disabled=disabled type=text id="count">`;
 document.getElementById("piece_stats").innerHTML = statsHTML;
 
-game = new TetrisGame(
-    document.getElementById("tetris"),
-    rect.width,
-    piecesImages,
-    bgImage,
-    key_presses,
-    (game) => {
-        document.getElementById("score").value = game.score;
-        document.getElementById("lines").value = game.rowCount;
-        document.getElementById("level").value = game.level;
-        document.getElementById("next").src = piecesFiles[game.nextPieceIndex];
-        const totalPieces = game.pieceCount.reduce((a, b) => a + b, 0);
-        document.getElementById("count").value = '#' + totalPieces;
-        if (totalPieces > 0) {
-            for (let i = 0; i < game.pieceCount.length; ++i) {
-                document.getElementById("piece" + i).value = (100 * (game.pieceCount[i] / totalPieces)).toFixed(2) + '%';
+let game;
+function resetGame() {
+    if (game)
+        game.stop();
+        
+    game = new TetrisGame(
+        document.getElementById("tetris"),
+        rect.width,
+        piecesImages,
+        bgImage,
+        key_presses,
+        (game) => {
+            document.getElementById("score").value = game.score;
+            document.getElementById("lines").value = game.rowCount;
+            document.getElementById("level").value = game.level;
+            document.getElementById("next").src = piecesFiles[game.nextPieceIndex];
+            const totalPieces = game.pieceCount.reduce((a, b) => a + b, 0);
+            document.getElementById("count").value = '#' + totalPieces;
+            if (totalPieces > 0) {
+                for (let i = 0; i < game.pieceCount.length; ++i) {
+                    document.getElementById("piece" + i).value = (100 * (game.pieceCount[i] / totalPieces)).toFixed(2) + '%';
+                }
             }
         }
-    }
-);
+    );
 
-game.run();
+    game.run();
+}
