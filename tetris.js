@@ -82,15 +82,15 @@ class TetrisGame {
         this.key_presses = key_presses;
         this.loopCallback = loopCallback;
         canvas.addEventListener("click", (e) => {
-            if (e.clientY > this.y + this.piece.height) {
-                this.key_presses.push("down");
-            } else {
-                if (e.clientX < this.x) {
-                    this.key_presses.push("left");
-                } else if (e.clientX >= this.x && e.clientX <= this.x + this.piece.width) {
-                    this.key_presses.push("up");
+            if (e.clientX < this.x) {
+                this.key_presses.push("left");
+            } else if (e.clientX > this.x + this.piece.width) {
+                this.key_presses.push("right");
+            } else if (e.clientX >= this.x && e.clientX <= this.x + this.piece.width) {
+                if (e.clientY > this.y + this.piece.height) {
+                    this.key_presses.push("down");
                 } else {
-                    this.key_presses.push("right");
+                    this.key_presses.push("up");
                 }
             }
         });
