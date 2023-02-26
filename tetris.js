@@ -64,7 +64,10 @@ class TetrisGame {
         this.bgImage = bgImage;
         this.delta = rect_size;
         this.degreesIndex = 0;
+        this.pieceCount = new Array(images.length).fill(0);
+        this.comboRowCount = [0, 0, 0, 0, 0];
         this.currentPieceIndex = Math.trunc(Math.random() * this.piecesImages.length);
+        this.pieceCount[this.currentPieceIndex] += 1;
         this.nextPieceIndex = Math.trunc(Math.random() * this.piecesImages.length);
         this.width = rect_size*TetrisGame.cols;
         this.height = rect_size*TetrisGame.rows;
@@ -108,6 +111,7 @@ class TetrisGame {
         this.offScreenCanvas.restore();
         this.collapseCompleteLines();
         this.currentPieceIndex = this.nextPieceIndex;
+        this.pieceCount[this.currentPieceIndex] += 1;
         this.nextPieceIndex = Math.trunc(Math.random() * this.piecesImages.length);
         this.x = this.delta*4;
         this.y = 0;
@@ -138,6 +142,7 @@ class TetrisGame {
         }
         this.score += TetrisGame.scores[lines];
         this.rowCount += lines;
+        this.comboRowCount[lines] += 1;
         this.level = 1 + Math.trunc(this.rowCount/10);
         this.gravityInterval = TetrisGame.startInterval - (this.level -1)*10;
     }
