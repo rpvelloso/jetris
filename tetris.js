@@ -7,7 +7,7 @@ const piecesFiles = [
     "data:image/png;base64, iVBORw0KGgoAAAANSUhEUgAAACgAAAA8CAYAAAAUufjgAAAABHNCSVQICAgIfAhkiAAAAIRJREFUaIHt18EJwCAQBVE3pBH7Lyql6CFgA/OFPcwr4DOEHNwaeSs59ibHjjUzO/WNJ7N0j4GUgZSBlIGUgZSBlIGUgVRd2Iw++dt/QW8SykDKQMpAykDKQMpAykDKQKr9TVLpwbT/JgneEOm99v+ggZSBlIGUgZSBlIGUgZSBVPsn/wb+Xw116jOk4gAAAABJRU5ErkJggg==",
     "data:image/png;base64, iVBORw0KGgoAAAANSUhEUgAAAFAAAAAUCAYAAAAa2LrXAAAABHNCSVQICAgIfAhkiAAAAFNJREFUWIXt2KEVACAMxNArj/1XBsMEpK75pu5EZCvJib7tpK9gvTtpbzVtjWVAyICQASEDQgaEDAgZEDIgZEDIgJABIQNCBoQMCBkQMiBU8aWPXM2zBifNv7EtAAAAAElFTkSuQmCC",
 ];
-const bg_image = createImage("data:image/png;base64, iVBORw0KGgoAAAANSUhEUgAAAMwAAAGUCAYAAAB5iM3cAAAABHNCSVQICAgIfAhkiAAABEhJREFUeJzt00ENwCAAwECGcfROBbNAX2TJnYJ++ux37QEcmbcD4E8MA4FhIDAMBIaBwDAQGAYCw0BgGAgMA4FhIDAMBIaBwDAQGAYCw0BgGAgMA4FhIDAMBIaBwDAQGAYCw0BgGAgMA4FhIDAMBIaBwDAQGAYCw0BgGAgMA4FhIDAMBIaBwDAQGAYCw0BgGAgMA4FhIDAMBIaBwDAQGAYCw0BgGAgMA4FhIDAMBIaBwDAQGAYCw0BgGAgMA4FhIDAMBIaBwDAQGAYCw0BgGAgMA4FhIDAMBIaBwDAQGAYCw0BgGAgMA4FhIDAMBIaBwDAQGAYCw0BgGAgMA4FhIDAMBIaBwDAQGAYCw0BgGAgMA4FhIDAMBIaBwDAQGAYCw0BgGAgMA4FhIDAMBIaBwDAQGAYCw0BgGAgMA4FhIDAMBIaBwDAQGAYCw0BgGAgMA4FhIDAMBIaBwDAQGAYCw0BgGAgMA4FhIDAMBIaBwDAQGAYCw0BgGAgMA4FhIDAMBIaBwDAQGAYCw0BgGAgMA4FhIDAMBIaBwDAQGAYCw0BgGAgMA4FhIDAMBIaBwDAQGAYCw0BgGAgMA4FhIDAMBIaBwDAQGAYCw0BgGAgMA4FhIDAMBIaBwDAQGAYCw0BgGAgMA4FhIDAMBIaBwDAQGAYCw0BgGAgMA4FhIDAMBIaBwDAQGAYCw0BgGAgMA4FhIDAMBIaBwDAQGAYCw0BgGAgMA4FhIDAMBIaBwDAQGAYCw0BgGAgMA4FhIDAMBIaBwDAQGAYCw0BgGAgMA4FhIDAMBIaBwDAQGAYCw0BgGAgMA4FhIDAMBIaBwDAQGAYCw0BgGAgMA4FhIDAMBIaBwDAQGAYCw0BgGAgMA4FhIDAMBIaBwDAQGAYCw0BgGAgMA4FhIDAMBIaBwDAQGAYCw0BgGAgMA4FhIDAMBIaBwDAQGAYCw0BgGAgMA4FhIDAMBIaBwDAQGAYCw0BgGAgMA4FhIDAMBIaBwDAQGAYCw0BgGAgMA4FhIDAMBIaBwDAQGAYCw0BgGAgMA4FhIDAMBIaBwDAQGAYCw0BgGAgMA4FhIDAMBIaBwDAQGAYCw0BgGAgMA4FhIDAMBIaBwDAQGAYCw0BgGAgMA4FhIDAMBIaBwDAQGAYCw0BgGAgMA4FhIDAMBIaBwDAQGAYCw0BgGAgMA4FhIDAMBIaBwDAQGAYCw0BgGAgMA4FhIDAMBIaBwDAQGAYCw0BgGAgMA4FhIDAMBIaBwDAQGAYCw0BgGAgMA4FhIDAMBIaBwDAQGAYCw0BgGAgMA4FhIDAMBIaBwDAQGAYCw0BgGAgMA4FhIDAMBIaBwDAQGAYCw0BgGAgMA4FhIDAMBIaBwDAQGAYCw0BgGAgMA4FhIDAMBIaBwDAQGAYCw0BgGAgMA4FhIDAMBIaBwDAQGAYCw0BgGAgMA4FhIDAMBIaBwDAQGAYCw0BgGAgMA4FhIPgA5VwGjubUVFoAAAAASUVORK5CYII=");
+const bgImage = createImage("data:image/png;base64, iVBORw0KGgoAAAANSUhEUgAAAMwAAAGUCAYAAAB5iM3cAAAABHNCSVQICAgIfAhkiAAABEhJREFUeJzt00ENwCAAwECGcfROBbNAX2TJnYJ++ux37QEcmbcD4E8MA4FhIDAMBIaBwDAQGAYCw0BgGAgMA4FhIDAMBIaBwDAQGAYCw0BgGAgMA4FhIDAMBIaBwDAQGAYCw0BgGAgMA4FhIDAMBIaBwDAQGAYCw0BgGAgMA4FhIDAMBIaBwDAQGAYCw0BgGAgMA4FhIDAMBIaBwDAQGAYCw0BgGAgMA4FhIDAMBIaBwDAQGAYCw0BgGAgMA4FhIDAMBIaBwDAQGAYCw0BgGAgMA4FhIDAMBIaBwDAQGAYCw0BgGAgMA4FhIDAMBIaBwDAQGAYCw0BgGAgMA4FhIDAMBIaBwDAQGAYCw0BgGAgMA4FhIDAMBIaBwDAQGAYCw0BgGAgMA4FhIDAMBIaBwDAQGAYCw0BgGAgMA4FhIDAMBIaBwDAQGAYCw0BgGAgMA4FhIDAMBIaBwDAQGAYCw0BgGAgMA4FhIDAMBIaBwDAQGAYCw0BgGAgMA4FhIDAMBIaBwDAQGAYCw0BgGAgMA4FhIDAMBIaBwDAQGAYCw0BgGAgMA4FhIDAMBIaBwDAQGAYCw0BgGAgMA4FhIDAMBIaBwDAQGAYCw0BgGAgMA4FhIDAMBIaBwDAQGAYCw0BgGAgMA4FhIDAMBIaBwDAQGAYCw0BgGAgMA4FhIDAMBIaBwDAQGAYCw0BgGAgMA4FhIDAMBIaBwDAQGAYCw0BgGAgMA4FhIDAMBIaBwDAQGAYCw0BgGAgMA4FhIDAMBIaBwDAQGAYCw0BgGAgMA4FhIDAMBIaBwDAQGAYCw0BgGAgMA4FhIDAMBIaBwDAQGAYCw0BgGAgMA4FhIDAMBIaBwDAQGAYCw0BgGAgMA4FhIDAMBIaBwDAQGAYCw0BgGAgMA4FhIDAMBIaBwDAQGAYCw0BgGAgMA4FhIDAMBIaBwDAQGAYCw0BgGAgMA4FhIDAMBIaBwDAQGAYCw0BgGAgMA4FhIDAMBIaBwDAQGAYCw0BgGAgMA4FhIDAMBIaBwDAQGAYCw0BgGAgMA4FhIDAMBIaBwDAQGAYCw0BgGAgMA4FhIDAMBIaBwDAQGAYCw0BgGAgMA4FhIDAMBIaBwDAQGAYCw0BgGAgMA4FhIDAMBIaBwDAQGAYCw0BgGAgMA4FhIDAMBIaBwDAQGAYCw0BgGAgMA4FhIDAMBIaBwDAQGAYCw0BgGAgMA4FhIDAMBIaBwDAQGAYCw0BgGAgMA4FhIDAMBIaBwDAQGAYCw0BgGAgMA4FhIDAMBIaBwDAQGAYCw0BgGAgMA4FhIDAMBIaBwDAQGAYCw0BgGAgMA4FhIDAMBIaBwDAQGAYCw0BgGAgMA4FhIDAMBIaBwDAQGAYCw0BgGAgMA4FhIDAMBIaBwDAQGAYCw0BgGAgMA4FhIDAMBIaBwDAQGAYCw0BgGAgMA4FhIDAMBIaBwDAQGAYCw0BgGAgMA4FhIPgA5VwGjubUVFoAAAAASUVORK5CYII=");
 const rect = createImage("data:image/png;base64, iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAYAAACNiR0NAAAABHNCSVQICAgIfAhkiAAAADFJREFUOI3t1bERADAMwkCR8/4r4yKNB6BEA3wrASbYANgZUxIvIp0KFixYsOBPhBewHpsFJ5d59QUAAAAASUVORK5CYII=");
                                 
 function createImage(src) {
@@ -26,29 +26,6 @@ const keys = {
     65: "left", // a
     68: "right", // d
 };
-
-const MoveStatus = {
-    SUCCESS: 0,
-    COLLISION: -4,
-    INVALID_LEFT: -1,
-    INVALID_RIGHT: -2,
-    INVALID_BOTTOM: -3
-};
-
-const key_events = {
-    "up": (game) => {
-        game.rotate();
-    },
-    "down": (game) => {
-        return game.moveDown();
-    },
-    "left": (game) => {
-        game.moveLeft();
-    },
-    "right": (game) => {
-        game.moveRight();
-    },
-}
 
 let key_presses = [];
 window.onload = function () {
@@ -70,25 +47,37 @@ class TetrisGame {
     static startInterval = 600;
     static refreshInterval = 100;
     static degrees = [0, 90, 180, -90];
+    static scores = [0, 50, 100, 200, 400];
 
-    constructor(canvasName, width, height, rect_size, images) {
-        this.ctx = document.getElementById(canvasName).getContext("2d");
-        this.offScreenCanvas = new OffscreenCanvas(width, height).getContext("2d");
+    static MoveStatus = {
+        SUCCESS: 0,
+        COLLISION: -4,
+        INVALID_LEFT: -1,
+        INVALID_RIGHT: -2,
+        INVALID_BOTTOM: -3
+    };
+    
+    constructor(canvas, rect_size, images, bgImage, key_presses, loopCallback) {
+        this.ctx = canvas.getContext("2d");
+        this.offScreenCanvas = new OffscreenCanvas(bgImage.width, bgImage.height).getContext("2d");
         this.piecesImages = images;
+        this.bgImage = bgImage;
         this.delta = rect_size;
         this.degreesIndex = 0;
         this.currentPieceIndex = Math.trunc(Math.random() * this.piecesImages.length);
         this.nextPieceIndex = Math.trunc(Math.random() * this.piecesImages.length);
         this.width = rect_size*TetrisGame.cols;
         this.height = rect_size*TetrisGame.rows;
-        this.xOffset = (width % rect_size) / 2;
-        this.yOffset = (height % rect_size) / 2;
+        this.xOffset = (bgImage.width % rect_size) / 2;
+        this.yOffset = (bgImage.height % rect_size) / 2;
         this.x = this.delta*4;
         this.y = 0;
         this.score = 0;
         this.rowCount = 0;
-        this.interval = TetrisGame.startInterval;
+        this.gravityInterval = TetrisGame.startInterval;
         this.level = 1;
+        this.key_presses = key_presses;
+        this.loopCallback = loopCallback;
     }
 
     get rotation() {return TetrisGame.degrees[this.degreesIndex] * Math.PI / 180.0;}
@@ -122,10 +111,9 @@ class TetrisGame {
         this.nextPieceIndex = Math.trunc(Math.random() * this.piecesImages.length);
         this.x = this.delta*4;
         this.y = 0;
-        this.degrees = 0;
+        this.degreesIndex = 0;
     }
 
-    static scores = [0, 50, 100, 200, 400];
     collapseCompleteLines() {
         let lines = 0;
         let off = this.offScreenCanvas.getImageData(
@@ -151,20 +139,20 @@ class TetrisGame {
         this.score += TetrisGame.scores[lines];
         this.rowCount += lines;
         this.level = 1 + Math.trunc(this.rowCount/10);
-        this.interval = TetrisGame.startInterval - (this.level -1)*10;
+        this.gravityInterval = TetrisGame.startInterval - (this.level -1)*10;
     }
 
     validateMove(xx, yy) {
         const w = this.pieceWidth;
         const h = this.pieceHeight;
         if (xx < 0) {
-            return MoveStatus.INVALID_LEFT;
+            return TetrisGame.MoveStatus.INVALID_LEFT;
         }
         if (xx + w > this.width) {
-            return MoveStatus.INVALID_RIGHT;
+            return TetrisGame.MoveStatus.INVALID_RIGHT;
         }
         if (yy + h > this.height) {
-            return MoveStatus.INVALID_BOTTOM;
+            return TetrisGame.MoveStatus.INVALID_BOTTOM;
         }
         const pieceBmp = this.pieceBitmap;
         const off = this.offScreenCanvas.getImageData(xx+this.xOffset, yy+this.yOffset, w, h);
@@ -180,30 +168,30 @@ class TetrisGame {
                     (pieceBmp.data[pos] > 75) &&
                     (off.data[pos] != 0)
                 ) {
-                    return MoveStatus.COLLISION;
+                    return TetrisGame.MoveStatus.COLLISION;
                 }
             }
         }
-        return MoveStatus.SUCCESS;
+        return TetrisGame.MoveStatus.SUCCESS;
     }
 
     moveLeft() {
         let next_x = this.x - this.delta;
-        if (this.validateMove(next_x, this.y) == MoveStatus.SUCCESS) {
+        if (this.validateMove(next_x, this.y) == TetrisGame.MoveStatus.SUCCESS) {
             this.x = next_x;
         }
     }
 
     moveRight() {
         let next_x = this.x + this.delta;
-        if (this.validateMove(next_x, this.y) == MoveStatus.SUCCESS) {
+        if (this.validateMove(next_x, this.y) == TetrisGame.MoveStatus.SUCCESS) {
             this.x = next_x;
         }
     }
 
     moveDown() {
         let next_y = this.y + this.delta;
-        if (this.validateMove(this.x, next_y) == MoveStatus.SUCCESS) {
+        if (this.validateMove(this.x, next_y) == TetrisGame.MoveStatus.SUCCESS) {
             this.y = next_y;
             return true;
         }
@@ -216,10 +204,10 @@ class TetrisGame {
         let moveResult = this.validateMove(this.x, this.y);
         let next_x, next_y;
         switch (moveResult) {
-            case MoveStatus.COLLISION:
+            case TetrisGame.MoveStatus.COLLISION:
                 this.degreesIndex = curr_degree;
                 break;
-            case MoveStatus.INVALID_LEFT:
+            case TetrisGame.MoveStatus.INVALID_LEFT:
                 next_x = 0;
                 if (this.validateMove(next_x, this.y) != 0) {
                     this.degreesIndex = curr_degree;
@@ -227,7 +215,7 @@ class TetrisGame {
                     this.x = next_x;
                 }
                 break;
-            case MoveStatus.INVALID_RIGHT:
+            case TetrisGame.MoveStatus.INVALID_RIGHT:
                 next_x = this.width - this.pieceWidth;
                 if (this.validateMove(next_x, this.y) != 0) {
                     this.degreesIndex = curr_degree;
@@ -235,7 +223,7 @@ class TetrisGame {
                     this.x = next_x;
                 }
                 break;
-            case MoveStatus.INVALID_BOTTOM:
+            case TetrisGame.MoveStatus.INVALID_BOTTOM:
                 next_y = this.height - this.pieceHeight;
                 if (this.validateMove(this.x, next_y) != 0) {
                     this.degreesIndex = curr_degree;
@@ -243,55 +231,66 @@ class TetrisGame {
                     this.y = next_y;
                 }
                 break;
-            default: // MoveStatus.SUCCESS
+            default: // TetrisGame.MoveStatus.SUCCESS
                 break;
         }
+    }
+
+    gameLoop() {
+        const key_events = {
+            "up": this.rotate.bind(this),
+            "down": this.moveDown.bind(this),
+            "left": this.moveLeft.bind(this),
+            "right": this.moveRight.bind(this)
+        }
+        while (this.key_presses.length > 0) {
+            key_events[this.key_presses.shift()]();
+        }
+        this.loopCallback(this);
+
+        this.ctx.drawImage(this.bgImage, 0, 0);
+        this.ctx.drawImage(this.offScreenCanvas.canvas, 0, 0);
+        this.ctx.save();
+        this.ctx.translate((this.pieceWidth/2) + this.X, (this.pieceHeight/2) + this.Y);
+        this.ctx.rotate(this.rotation);
+        const p = this.piece;
+        this.ctx.drawImage(p, -(p.width/2), -(p.height/2));
+        this.ctx.restore();
+    }
+
+    gravity() {
+        clearInterval(this.gravityIntervalHandler);
+    
+        if (!this.moveDown()) {
+            if (this.y == 0) {
+                clearInterval(this.refreshIntervalHandler);
+                clearInterval(this.gravityIntervalHandler);
+                window.alert('Game Over');
+                return;
+            }
+            this.nextPiece();
+        }
+        this.gravityIntervalHandler = setInterval(this.gravity.bind(this), this.gravityInterval);
+    }
+
+    run() {
+        this.refreshIntervalHandler = setInterval(this.gameLoop.bind(this), TetrisGame.refreshInterval);
+        this.gravityIntervalHandler = setInterval(this.gravity.bind(this), this.gravityInterval);
     }
 }
 
 game = new TetrisGame(
-    "tetris", 
-    bg_image.width, bg_image.height, 
+    document.getElementById("tetris"), 
     rect.width, 
-    piecesImages);
-
-function statsUpdate() {
-    document.getElementById("score").value = game.score;
-    document.getElementById("lines").value = game.rowCount;
-    document.getElementById("level").value = game.level;
-    document.getElementById("next").src = piecesFiles[game.nextPieceIndex];
-}
-    
-function gameLoop() {
-    while (key_presses.length > 0) {
-        k = key_presses.shift();
-        key_events[k](game);
+    piecesImages,
+    bgImage,
+    key_presses,
+    (game) => {
+        document.getElementById("score").value = game.score;
+        document.getElementById("lines").value = game.rowCount;
+        document.getElementById("level").value = game.level;
+        document.getElementById("next").src = piecesFiles[game.nextPieceIndex];
     }
-    statsUpdate();
-    game.ctx.drawImage(bg_image, 0, 0);
-    game.ctx.drawImage(game.offScreenCanvas.canvas, 0, 0);
-    game.ctx.save();
-    game.ctx.translate((game.pieceWidth/2) + game.X, (game.pieceHeight/2) + game.Y);
-    game.ctx.rotate(game.rotation);
-    const p = game.piece;
-    game.ctx.drawImage(p, -(p.width/2), -(p.height/2));
-    game.ctx.restore();
-}
+);
 
-let gravity = function() {
-    clearInterval(interval);
-
-    if (!key_events["down"](game)) {
-        if (game.y == 0) {
-            clearInterval(refreshInterval);
-            clearInterval(interval);
-            window.alert('Game Over');
-            return;
-        }
-        game.nextPiece();
-    }
-    interval = setInterval(gravity, game.interval);
-}
-
-let interval = setInterval(gravity, game.interval);
-let refreshInterval = setInterval(gameLoop, TetrisGame.refreshInterval);
+game.run();
