@@ -81,6 +81,19 @@ class TetrisGame {
         this.level = 1;
         this.key_presses = key_presses;
         this.loopCallback = loopCallback;
+        canvas.addEventListener("click", (e) => {
+            if (e.clientY > this.y + this.piece.height) {
+                this.key_presses.push("down");
+            } else {
+                if (e.clientX < this.x) {
+                    this.key_presses.push("left");
+                } else if (e.clientX >= this.x && e.clientX <= this.x + this.piece.width) {
+                    this.key_presses.push("up");
+                } else {
+                    this.key_presses.push("right");
+                }
+            }
+        });
     }
 
     get rotation() { return TetrisGame.degrees[this.degreesIndex] * Math.PI / 180.0; }
