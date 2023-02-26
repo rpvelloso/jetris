@@ -35,64 +35,18 @@ const MoveStatus = {
     INVALID_BOTTOM: -3
 };
 
-// TODO put this inside Game class and call game.event here
 const key_events = {
     "up": (game) => {
-        curr_degree = game.degreesIndex;
-        game.degreesIndex = (game.degreesIndex + 1)%4;
-        moveResult = game.validateMove(game.x, game.y);
-        switch (moveResult) {
-            case MoveStatus.COLLISION:
-                game.degreesIndex = curr_degree;
-                break;
-            case MoveStatus.INVALID_LEFT:
-                next_x = 0;
-                if (game.validateMove(next_x, game.y) != 0) {
-                    game.degreesIndex = curr_degree;
-                } else {
-                    game.x = next_x;
-                }
-                break;
-            case MoveStatus.INVALID_RIGHT:
-                next_x = game.width - game.pieceWidth;
-                if (game.validateMove(next_x, game.y) != 0) {
-                    game.degreesIndex = curr_degree;
-                } else {
-                    game.x = next_x;
-                }
-                break;
-            case MoveStatus.INVALID_BOTTOM:
-                next_y = game.height - game.pieceHeight;
-                if (game.validateMove(game.x, next_y) != 0) {
-                    game.degreesIndex = curr_degree;
-                } else {
-                    game.y = next_y;
-                }
-                break;
-            default: // MoveStatus.SUCCESS
-                break;
-        }
+        game.rotate();
     },
     "down": (game) => {
-        next_y = game.y + game.delta;
-        if (game.validateMove(game.x, next_y) == MoveStatus.SUCCESS) {
-            game.y = next_y;
-            return true;
-        } else {
-            return false;
-        }
+        return game.moveDown();
     },
     "left": (game) => {
-        next_x = game.x - game.delta;
-        if (game.validateMove(next_x, game.y) == MoveStatus.SUCCESS) {
-            game.x = next_x;
-        }
+        game.moveLeft();
     },
     "right": (game) => {
-        next_x = game.x + game.delta;
-        if (game.validateMove(next_x, game.y) == MoveStatus.SUCCESS) {
-            game.x = next_x;
-        }
+        game.moveRight();
     },
 }
 
@@ -115,6 +69,7 @@ class TetrisGame {
     static cols = 10;
     static startInterval = 600;
     static refreshInterval = 100;
+    static degrees = [0, 90, 180, -90];
 
     constructor(canvasName, width, height, rect_size, images) {
         this.ctx = document.getElementById(canvasName).getContext("2d");
@@ -136,7 +91,6 @@ class TetrisGame {
         this.level = 1;
     }
 
-    static degrees = [0, 90, 180, -90];
     get rotation() {return TetrisGame.degrees[this.degreesIndex] * Math.PI / 180.0;}
     get X() {return this.x + this.xOffset;}
     get Y() {return this.y + this.yOffset;}
@@ -231,6 +185,67 @@ class TetrisGame {
             }
         }
         return MoveStatus.SUCCESS;
+    }
+
+    moveLeft() {
+        let next_x = this.x - this.delta;
+        if (this.validateMove(next_x, this.y) == MoveStatus.SUCCESS) {
+            this.x = next_x;
+        }
+    }
+
+    moveRight() {
+        let next_x = this.x + this.delta;
+        if (this.validateMove(next_x, this.y) == MoveStatus.SUCCESS) {
+            this.x = next_x;
+        }
+    }
+
+    moveDown() {
+        let next_y = this.y + this.delta;
+        if (this.validateMove(this.x, next_y) == MoveStatus.SUCCESS) {
+            this.y = next_y;
+            return true;
+        }
+        return false;
+    }
+
+    rotate() {
+        let curr_degree = this.degreesIndex;
+        this.degreesIndex = (this.degreesIndex + 1)%4;
+        let moveResult = this.validateMove(this.x, this.y);
+        let next_x, next_y;
+        switch (moveResult) {
+            case MoveStatus.COLLISION:
+                this.degreesIndex = curr_degree;
+                break;
+            case MoveStatus.INVALID_LEFT:
+                next_x = 0;
+                if (this.validateMove(next_x, this.y) != 0) {
+                    this.degreesIndex = curr_degree;
+                } else {
+                    this.x = next_x;
+                }
+                break;
+            case MoveStatus.INVALID_RIGHT:
+                next_x = this.width - this.pieceWidth;
+                if (this.validateMove(next_x, this.y) != 0) {
+                    this.degreesIndex = curr_degree;
+                } else {
+                    this.x = next_x;
+                }
+                break;
+            case MoveStatus.INVALID_BOTTOM:
+                next_y = this.height - this.pieceHeight;
+                if (this.validateMove(this.x, next_y) != 0) {
+                    this.degreesIndex = curr_degree;
+                } else {
+                    this.y = next_y;
+                }
+                break;
+            default: // MoveStatus.SUCCESS
+                break;
+        }
     }
 }
 
