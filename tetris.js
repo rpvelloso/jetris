@@ -7,9 +7,9 @@ const piecesFiles = [
     "data:image/png;base64, iVBORw0KGgoAAAANSUhEUgAAACgAAAA8CAYAAAAUufjgAAAABHNCSVQICAgIfAhkiAAAAIRJREFUaIHt18EJwCAQBVE3pBH7Lyql6CFgA/OFPcwr4DOEHNwaeSs59ibHjjUzO/WNJ7N0j4GUgZSBlIGUgZSBlIGUgVRd2Iw++dt/QW8SykDKQMpAykDKQMpAykDKQKr9TVLpwbT/JgneEOm99v+ggZSBlIGUgZSBlIGUgZSBVPsn/wb+Xw116jOk4gAAAABJRU5ErkJggg==",
     "data:image/png;base64, iVBORw0KGgoAAAANSUhEUgAAAFAAAAAUCAYAAAAa2LrXAAAABHNCSVQICAgIfAhkiAAAAFNJREFUWIXt2KEVACAMxNArj/1XBsMEpK75pu5EZCvJib7tpK9gvTtpbzVtjWVAyICQASEDQgaEDAgZEDIgZEDIgJABIQNCBoQMCBkQMiBU8aWPXM2zBifNv7EtAAAAAElFTkSuQmCC",
 ];
-const bgImage = createImage("data:image/png;base64, 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");
+const bgImage = createImage("data:image/png;base64, iVBORw0KGgoAAAANSUhEUgAAAMwAAAGUCAYAAAB5iM3cAAAABHNCSVQICAgIfAhkiAAABStJREFUeJzt3LtNxFAURdEHopYpcqpxCy5mkmkGIhAEiLevkPhorcjRkZMtObl+OI7jeQFbHn/6BeAveXp9uN/vP/ke8KtdLpe11rtg1lrrdrt9y/h5nut6vdqz92/2juNYa/kkg0QwEAgGAsFAIBgIBAOBYCAQDASCgUAwEAgGAsFAIBgIBAOBYCAQDASCgeDDxeV5nt86bs/ef9pba62H17/GuOmHz7npt2cv7LnphwHBQCAYCAQDgWAgEAwEgoFAMBAIBgLBQCAYCAQDgWAgEAwEgoFAMBAIBgI3/fbsBW76YYObfnv2wp6bfhgQDASCgUAwEAgGAsFAIBgIBAOBYCAQDASCgUAwEAgGAsFAIBgIBAOBYCBw02/PXuCmHza46bdnL+y56YcBwUAgGAgEA4FgIBAMBIKBQDAQCAYCwUAgGAgEA4FgIBAMBIKBQDAQCAYCN/327AVu+mGDm3579sKem34YEAwEgoFAMBAIBgLBQCAYCAQDgWAgEAwEgoFAMBAIBgLBQCAYCAQDgWAgcNNvz17gph82uOm3Zy/suemHAcFAIBgIBAOBYCAQDASCgUAwEAgGAsFAIBgIBAOBYCAQDASCgUAwEAgGAjf99uwFbvphg5t+e/bCnpt+GBAMBIKBQDAQCAYCwUAgGAgEA4FgIBAMBIKBQDAQCAYCwUAgGAgEA4FgIHDTb89e4KYfNrjpt2cv7LnphwHBQCAYCAQDgWAgEAwEgoFAMBAIBgLBQCAYCAQDgWAgEAwEgoFAMBAIBgI3/fbsBW76YYObfnv2wp6bfhgQDASCgUAwEAgGAsFAIBgIBAOBYCAQDASCgUAwEAgGAsFAIBgIBAOBYCBw02/PXuCmHza46bdnL+y56YcBwUAgGAgEA4FgIBAMBIKBQDAQCAYCwUAgGAgEA4FgIBAMBIKBQDAQCAYCN/327AVu+mGDm3579sKem34YEAwEgoFAMBAIBgLBQCAYCAQDgWAgEAwEgoFAMBAIBgLBQCAYCAQDgWAgcNNvz17gph82uOm3Zy/suemHAcFAIBgIBAOBYCAQDASCgUAwEAgGAsFAIBgIBAOBYCAQDASCgUAwEAgGAjf99uwFbvphg5t+e/bCnpt+GBAMBIKBQDAQCAYCwUAgGAgEA4FgIBAMBIKBQDAQCAYCwUAgGAgEA4FgIHDTb89e4KYfNrjpt2cv7LnphwHBQCAYCAQDgWAgEAwEgoFAMBAIBgLBQCAYCAQDgWAgEAwEgoFAMBAIBgI3/fbsBW76YYObfnv2wp6bfhgQDASCgUAwEAgGAsFAIBgIBAOBYCAQDASCgUAwEAgGAsFAIBgIBAOBYCBw02/PXuCmHza46bdnL+y56YcBwUAgGAgEA4FgIBAMBIKBQDAQCAYCwUAgGAgEA4FgIBAMBIKBQDAQCAYCN/327AVu+mGDm3579sKem34YEAwEgoFAMBAIBgLBQCAYCAQDgWAgEAwEgoFAMBAIBgLBQCAYCAQDgWAgcNNvz17gph82uOm3Zy/suemHAcFAIBgIBAOBYCAQDASCgUAwEAgGAsFAIBgIBAOBYCAQDASCgUAwEAgGAjf99uwFbvphg5t+e/bCnpt+GBAMBIKBQDAQCAYCwUAgGAgEA4FgIBAMBIKBQDAQCAYCwUAgGAgEA4FgIHDTb89e4KYfNrjpt2cv7LnphwHBQCAYCAQDgWAgEAwEgoFAMBAIBgLBQCAYCAQDgWAgEAwEgoFAMBAIBgI3/fbsBW83/cDXfJJB8AIr+9PLM9tGAQAAAABJRU5ErkJggg==");
 const rect = createImage("data:image/png;base64, iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAYAAACNiR0NAAAABHNCSVQICAgIfAhkiAAAADFJREFUOI3t1bERADAMwkCR8/4r4yKNB6BEA3wrASbYANgZUxIvIp0KFixYsOBPhBewHpsFJ5d59QUAAAAASUVORK5CYII=");
-
+    
 function createImage(src) {
     img = new Image();
     img.src = src;
@@ -82,15 +82,25 @@ class TetrisGame {
         this.key_presses = key_presses;
         this.loopCallback = loopCallback;
         canvas.addEventListener("click", (e) => {
-            if (e.clientX < this.x) {
-                this.key_presses.push("left");
-            } else if (e.clientX > this.x + this.piece.width) {
-                this.key_presses.push("right");
-            } else if (e.clientX >= this.x && e.clientX <= this.x + this.piece.width) {
-                if (e.clientY > this.y + this.piece.height) {
+            const canvasBoundingRect = canvas.getBoundingClientRect();
+            const p = this.piece;
+            const top = this.Y + canvasBoundingRect.y;
+            const bottom = this.Y + this.pieceHeight + canvasBoundingRect.y;
+            const left = this.X + canvasBoundingRect.x;
+            const right = this.X + this.pieceWidth + canvasBoundingRect.x;
+
+            console.log(left, top, right, bottom);
+            console.log(e.pageX, e.pageY);
+
+            if (e.pageX >= left && e.pageX <= right && e.pageY >= top && e.pageY <= bottom) {
+                this.key_presses.push("up");
+            } else {
+                if (e.pageX < left) {
+                    this.key_presses.push("left");
+                } else if (e.pageX > right) {
+                    this.key_presses.push("right");
+                } else if (e.pageY > bottom) {
                     this.key_presses.push("down");
-                } else {
-                    this.key_presses.push("up");
                 }
             }
         });
@@ -281,8 +291,7 @@ class TetrisGame {
 
         if (!this.moveDown()) {
             if (this.y == 0) {
-                clearInterval(this.refreshIntervalHandler);
-                clearInterval(this.gravityIntervalHandler);
+                this.stop();
                 window.alert('Game Over');
                 return;
             }
