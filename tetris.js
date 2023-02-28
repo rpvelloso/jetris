@@ -27,11 +27,11 @@ const keys = {
     68: "right", // d
 };
 
-let key_presses = [];
+let keyPresses = [];
 window.onload = function () {
     document.getElementById("body").addEventListener("keydown", (e) => {
         if (keys[e.keyCode]) {
-            key_presses.push(keys[e.keyCode]);
+            keyPresses.push(keys[e.keyCode]);
         }
     });
 }
@@ -57,7 +57,7 @@ class TetrisGame {
         INVALID_BOTTOM: -3
     };
 
-    constructor(canvas, rect_size, images, bgImage, key_presses, loopCallback) {
+    constructor(canvas, rect_size, images, bgImage, keyPresses, loopCallback) {
         this.ctx = canvas.getContext("2d");
         this.offScreenCanvas = new OffscreenCanvas(bgImage.width, bgImage.height).getContext("2d");
         this.piecesImages = images;
@@ -79,8 +79,9 @@ class TetrisGame {
         this.rowCount = 0;
         this.gravityInterval = TetrisGame.startInterval;
         this.level = 1;
-        this.key_presses = key_presses;
+        this.keyPresses = keyPresses;
         this.loopCallback = loopCallback;
+        this.pause = () => {};
         canvas.addEventListener("click", (e) => {
             const canvasBoundingRect = canvas.getBoundingClientRect();
             const p = this.piece;
@@ -89,18 +90,15 @@ class TetrisGame {
             const left = this.X + canvasBoundingRect.x;
             const right = this.X + this.pieceWidth + canvasBoundingRect.x;
 
-            console.log(left, top, right, bottom);
-            console.log(e.pageX, e.pageY);
-
             if (e.pageX >= left && e.pageX <= right && e.pageY >= top && e.pageY <= bottom) {
-                this.key_presses.push("up");
+                this.keyPresses.push("up");
             } else {
                 if (e.pageX < left) {
-                    this.key_presses.push("left");
+                    this.keyPresses.push("left");
                 } else if (e.pageX > right) {
-                    this.key_presses.push("right");
+                    this.keyPresses.push("right");
                 } else if (e.pageY > bottom) {
-                    this.key_presses.push("down");
+                    this.keyPresses.push("down");
                 }
             }
         });
@@ -271,8 +269,8 @@ class TetrisGame {
             "left": this.moveLeft.bind(this),
             "right": this.moveRight.bind(this)
         }
-        while (this.key_presses.length > 0) {
-            key_events[this.key_presses.shift()]();
+        while (this.keyPresses.length > 0) {
+            key_events[this.keyPresses.shift()]();
         }
         this.loopCallback(this);
 
@@ -301,8 +299,10 @@ class TetrisGame {
     }
 
     run() {
+        this.keyPresses.length = 0;
         this.refreshIntervalHandler = setInterval(this.gameLoop.bind(this), TetrisGame.refreshInterval);
         this.gravityIntervalHandler = setInterval(this.gravity.bind(this), this.gravityInterval);
+        this.pause = this.stop.bind(this);
     }
 
     stop() {
@@ -311,6 +311,7 @@ class TetrisGame {
 
         if (this.gravityIntervalHandler)
             clearInterval(this.gravityIntervalHandler);
+        this.pause = this.run.bind(this);
     }
 }
 
@@ -333,7 +334,7 @@ function resetGame() {
         rect.width,
         piecesImages,
         bgImage,
-        key_presses,
+        keyPresses,
         (game) => {
             document.getElementById("score").value = game.score;
             document.getElementById("lines").value = game.rowCount;
