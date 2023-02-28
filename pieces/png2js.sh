@@ -7,13 +7,13 @@ done
 
 echo 'const piecesFiles = [' > images.js
 for b64 in *.b64; do
-    if [ "${b64}" != "rect.png.b64" ] && [ "${b64}" != "bg10x20.png.b64" ]; then
+    if [ "${b64}" != "rect.png.b64" ] && [ "${b64}" != "bg10x20.png.b64" ] && [ "${b64}" != "splash.png.b64" ]; then
         cat $b64 >> images.js
         echo "," >> images.js
     fi
 done
 echo '];' >> images.js
-echo -n 'const bg_image = createImage(' >> images.js
+echo -n 'const bgImage = createImage(' >> images.js
 cat bg10x20.png.b64 >> images.js
 echo ');' >> images.js
 echo -n 'const rect = createImage(' >> images.js
