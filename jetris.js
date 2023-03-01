@@ -69,6 +69,7 @@ class TetrisMouseInput {
 }
 
 class TetrisTouchInput {
+    static movingDelta = 25;
     constructor(game) {
         game.ctx.canvas.addEventListener("touchstart", (e) => {
             if (e.touches.length == 1) {
@@ -80,14 +81,16 @@ class TetrisTouchInput {
         game.ctx.canvas.addEventListener("touchmove", (e) => {
             if (e.touches.length == 1) {
                 this.currentPoint = e.touches[0];
-                if (this.currentPoint.pageX > this.startPoint.pageX) {
+                if (this.currentPoint.pageX > this.startPoint.pageX + TetrisTouchInput.movingDelta) {
                     game.inputQueue.push("right");
-                } else if (this.currentPoint.pageX < this.startPoint.pageX) {
+                    this.startPoint = this.currentPoint;
+                } else if (this.currentPoint.pageX < this.startPoint.pageX - TetrisTouchInput.movingDelta) {
                     game.inputQueue.push("left");
-                } else  if (this.currentPoint.pageY > this.startPoint.pageY) {
+                    this.startPoint = this.currentPoint;
+                } else  if (this.currentPoint.pageY > this.startPoint.pageY + TetrisTouchInput.movingDelta) {
                     game.inputQueue.push("down");
+                    this.startPoint = this.currentPoint;
                 }
-                this.startPoint = this.currentPoint;
                 this.moving = true;
             }
         });        
