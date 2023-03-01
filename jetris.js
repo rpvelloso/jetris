@@ -25,6 +25,7 @@ const keys = {
     83: "down", // s
     65: "left", // a
     68: "right", // d
+    32: "land",
 };
 
 let keyPresses = [];
@@ -44,7 +45,7 @@ piecesFiles.forEach((src) => {
 class TetrisGame {
     static rows = 20;
     static cols = 10;
-    static startInterval = 600;
+    static startInterval = 500;
     static refreshInterval = 100;
     static degrees = [0, 90, 180, -90];
     static scores = [0, 50, 100, 200, 400];
@@ -57,7 +58,7 @@ class TetrisGame {
         INVALID_BOTTOM: -3
     };
 
-    constructor(canvas, rect_size, images, bgImage, keyPresses, loopCallback) {
+    constructor(canvas, rect_size, images, bgImage, keyPresses, speedIncrease, loopCallback) {
         this.ctx = canvas.getContext("2d");
         this.offScreenCanvas = new OffscreenCanvas(bgImage.width, bgImage.height).getContext("2d");
         this.piecesImages = images;
@@ -80,6 +81,7 @@ class TetrisGame {
         this.gravityInterval = TetrisGame.startInterval;
         this.level = 1;
         this.keyPresses = keyPresses;
+        this.speedIncrease = speedIncrease;
         this.loopCallback = loopCallback;
         this.pause = () => {};
         canvas.addEventListener("click", (e) => {
@@ -165,7 +167,7 @@ class TetrisGame {
         this.rowCount += lines;
         this.comboRowCount[lines] += 1;
         this.level = 1 + Math.trunc(this.rowCount / 10);
-        this.gravityInterval = TetrisGame.startInterval - (this.level - 1) * 10;
+        this.gravityInterval = TetrisGame.startInterval - (this.level - 1) * this.speedIncrease;
     }
 
     validateMove(xx, yy) {
@@ -218,10 +220,15 @@ class TetrisGame {
     moveDown() {
         let next_y = this.y + this.delta;
         if (this.validateMove(this.x, next_y) == TetrisGame.MoveStatus.SUCCESS) {
-            this.y = next_y;
+            this.y += this.delta;
             return true;
         }
         return false;
+    }
+
+    land() {
+        this.keyPresses.length = 0;
+        while (this.moveDown());
     }
 
     rotate() {
@@ -267,7 +274,8 @@ class TetrisGame {
             "up": this.rotate.bind(this),
             "down": this.moveDown.bind(this),
             "left": this.moveLeft.bind(this),
-            "right": this.moveRight.bind(this)
+            "right": this.moveRight.bind(this),
+            "land": this.land.bind(this),
         }
         while (this.keyPresses.length > 0) {
             key_events[this.keyPresses.shift()]();
@@ -335,6 +343,7 @@ function resetGame() {
         piecesImages,
         bgImage,
         keyPresses,
+        25, 
         (game) => {
             document.getElementById("score").value = game.score;
             document.getElementById("lines").value = game.rowCount;

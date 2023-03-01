@@ -18,7 +18,7 @@
         </span>
         <span style="position:absolute; top:50px; left:0px;">
             <canvas id="tetris" width="204" height="404"></canvas>
-            <button onclick="resetGame();">New Game</button>
+            <button onclick="resetGame(); this.blur();">New Game</button>
             <button onclick="if (game) game.pause();">Pause</button>
         </span>
     </div>
