@@ -68,6 +68,36 @@ class TetrisMouseInput {
     }
 }
 
+class TetrisTouchInput {
+    constructor(game) {
+        game.ctx.canvas.addEventListener("touchstart", (e) => {
+            if (e.touches.length == 1) {
+                this.startPoint = e.touches[0];
+                this.currentPoint = e.touches[0];
+                this.moving = false;
+            }
+        });        
+        game.ctx.canvas.addEventListener("touchmove", (e) => {
+            if (e.touches.length == 1) {
+                this.currentPoint = e.touches[0];
+                if (this.currentPoint.pageX > this.startPoint.pageX) {
+                    game.inputQueue.push("right");
+                } else if (this.currentPoint.pageX < this.startPoint.pageX) {
+                    game.inputQueue.push("left");
+                } else  if (this.currentPoint.pageY > this.startPoint.pageY) {
+                    game.inputQueue.push("down");
+                }
+                this.startPoint = this.currentPoint;
+                this.moving = true;
+            }
+        });        
+        game.ctx.canvas.addEventListener("touchend", (e) => {
+            if (!this.moving) {
+                game.inputQueue.push("up");
+            }
+        });        
+    }
+}
 class TetrisGame {
     static rows = 20;
     static cols = 10;
@@ -111,7 +141,8 @@ class TetrisGame {
         this.pause = () => {};
         this.inputQueue = [];
         this.keyboardInput = new TetrisKeyboardInput(this);
-        this.mouseInput = new TetrisMouseInput(this);
+        //this.mouseInput = new TetrisMouseInput(this);
+        this.touchInput = new TetrisTouchInput(this);
     }
 
     get rotation() { return TetrisGame.degrees[this.degreesIndex] * Math.PI / 180.0; }
