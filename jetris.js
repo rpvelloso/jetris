@@ -336,14 +336,14 @@ let statsHTML = "";
 for (let i = 0; i < piecesFiles.length; ++i) {
     statsHTML = statsHTML +
         `<img style="position:absolute; top:${150 + i * 25}px; left:210px;" width="30" height="20" src="` + piecesImages[i].src +
-        `"><input style="position:absolute; top:${150 + i * 25}px; left:250px;" size=6 disabled=disabled type=text id="piece` + i + '">';
+        `"><input style="border:none; position:absolute; top:${150 + i * 25}px; left:250px;" size=6 disabled=disabled type=text id="piece` + i + '">';
 }
-statsHTML = statsHTML + `<input style="position:absolute; top:${150 + piecesFiles.length * 25}px; left:250px;" size=6 disabled=disabled type=text id="count">`;
+statsHTML = statsHTML + `<input style="border:none; position:absolute; top:${150 + piecesFiles.length * 25}px; left:250px;" size=6 disabled=disabled type=text id="count">`;
 
 const values = ['', 'I', 'II', 'III', 'IV'];
 for (let i = 1; i < 5; ++i) {
     statsHTML = statsHTML +
-        `<input disabled=disabled value=${values[i]} style="position:absolute; border:none; top:${150 + (i+piecesFiles.length) * 25}px; left:210px;" size="1"/><input style="position:absolute; top:${150 + (i+piecesFiles.length) * 25}px; left:250px;" size=6 disabled=disabled type=text id="score` + i + '">';
+        `<input disabled=disabled value=${values[i]} style="position:absolute; border:none; top:${150 + (i+piecesFiles.length) * 25}px; left:210px;" size="1"/><input style="border:none; position:absolute; top:${150 + (i+piecesFiles.length) * 25}px; left:250px;" size=6 disabled=disabled type=text id="score` + i + '">';
 }
 
 document.getElementById("piece_stats").innerHTML = statsHTML;
