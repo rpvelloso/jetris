@@ -1,9 +1,16 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+
 <body id="body">
     <audio autoplay loop>
         <source src="music.mp3" type="audio/mp3">
         Your browser does not support the audio element.
     </audio>
-    <div>
+    <div style="width:100%;">
         <span style="position:absolute; top:10px; left:0px;">
             Score: <input style="border:none;" type="text" id="score" disabled="disabled" size="5" />
             Lines: <input style="border:none;" type="text" id="lines" disabled="disabled" size="4" />
@@ -19,8 +26,8 @@
         <span style="position:absolute; top:50px; left:0px;">
             <canvas id="tetris" width="204" height="404"></canvas>
             <div>
-            <button onclick="resetGame(); this.blur();">New Game</button>
-            <button onclick="if (game) game.pause(); this.blur();">Pause</button>
+                <button onclick="resetGame(); this.blur();">New Game</button>
+                <button onclick="if (game) game.pause(); this.blur();">Pause</button>
             </div>
         </span>
     </div>
@@ -33,3 +40,5 @@
         splash.src = "data:image/png;base64, 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";
     </script>
 </body>
+
+</html>
