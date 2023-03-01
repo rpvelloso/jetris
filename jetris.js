@@ -16,31 +16,57 @@ function createImage(src) {
     return img;
 }
 
-const keys = {
-    38: "up", // key up
-    40: "down", // key down
-    37: "left", // key left
-    39: "right", // key right
-    87: "up", // w
-    83: "down", // s
-    65: "left", // a
-    68: "right", // d
-    32: "land",
-};
-
-let keyPresses = [];
-window.onload = function () {
-    document.getElementById("body").addEventListener("keydown", (e) => {
-        if (keys[e.keyCode]) {
-            keyPresses.push(keys[e.keyCode]);
-        }
-    });
-}
-
 let piecesImages = [];
 piecesFiles.forEach((src) => {
     piecesImages.push(createImage(src));
 });
+
+class TetrisKeyboardInput {
+    static keys = {
+        38: "up", // key up
+        40: "down", // key down
+        37: "left", // key left
+        39: "right", // key right
+        87: "up", // w
+        83: "down", // s
+        65: "left", // a
+        68: "right", // d
+        32: "land",
+    };
+
+    constructor(game) {
+        document.getElementById("body").addEventListener("keydown", (e) => {
+            if (TetrisKeyboardInput.keys[e.keyCode]) {
+                game.inputQueue.push(TetrisKeyboardInput.keys[e.keyCode]);
+            }
+        });
+    }
+}
+
+class TetrisMouseInput {
+    constructor(game) {
+        game.ctx.canvas.addEventListener("click", (e) => {
+            const canvasBoundingRect = game.ctx.canvas.getBoundingClientRect();
+            const p = game.piece;
+            const top = game.Y + canvasBoundingRect.y;
+            const bottom = game.Y + game.pieceHeight + canvasBoundingRect.y;
+            const left = game.X + canvasBoundingRect.x;
+            const right = game.X + game.pieceWidth + canvasBoundingRect.x;
+
+            if (e.pageX >= left && e.pageX <= right && e.pageY >= top && e.pageY <= bottom) {
+                game.inputQueue.push("up");
+            } else {
+                if (e.pageX < left) {
+                    game.inputQueue.push("left");
+                } else if (e.pageX > right) {
+                    game.inputQueue.push("right");
+                } else if (e.pageY > bottom) {
+                    game.inputQueue.push("down");
+                }
+            }
+        });
+    }
+}
 
 class TetrisGame {
     static rows = 20;
@@ -58,7 +84,7 @@ class TetrisGame {
         INVALID_BOTTOM: -3
     };
 
-    constructor(canvas, rect_size, images, bgImage, keyPresses, speedIncrease, loopCallback) {
+    constructor(canvas, rect_size, images, bgImage, speedIncrease, loopCallback) {
         this.ctx = canvas.getContext("2d");
         this.offScreenCanvas = new OffscreenCanvas(bgImage.width, bgImage.height).getContext("2d");
         this.piecesImages = images;
@@ -80,30 +106,12 @@ class TetrisGame {
         this.rowCount = 0;
         this.gravityInterval = TetrisGame.startInterval;
         this.level = 1;
-        this.keyPresses = keyPresses;
         this.speedIncrease = speedIncrease;
         this.loopCallback = loopCallback;
         this.pause = () => {};
-        canvas.addEventListener("click", (e) => {
-            const canvasBoundingRect = canvas.getBoundingClientRect();
-            const p = this.piece;
-            const top = this.Y + canvasBoundingRect.y;
-            const bottom = this.Y + this.pieceHeight + canvasBoundingRect.y;
-            const left = this.X + canvasBoundingRect.x;
-            const right = this.X + this.pieceWidth + canvasBoundingRect.x;
-
-            if (e.pageX >= left && e.pageX <= right && e.pageY >= top && e.pageY <= bottom) {
-                this.keyPresses.push("up");
-            } else {
-                if (e.pageX < left) {
-                    this.keyPresses.push("left");
-                } else if (e.pageX > right) {
-                    this.keyPresses.push("right");
-                } else if (e.pageY > bottom) {
-                    this.keyPresses.push("down");
-                }
-            }
-        });
+        this.inputQueue = [];
+        this.keyboardInput = new TetrisKeyboardInput(this);
+        this.mouseInput = new TetrisMouseInput(this);
     }
 
     get rotation() { return TetrisGame.degrees[this.degreesIndex] * Math.PI / 180.0; }
@@ -227,7 +235,7 @@ class TetrisGame {
     }
 
     land() {
-        this.keyPresses.length = 0;
+        this.inputQueue.length = 0;
         while (this.moveDown());
     }
 
@@ -270,15 +278,15 @@ class TetrisGame {
     }
 
     gameLoop() {
-        const key_events = {
+        const keyEvents = {
             "up": this.rotate.bind(this),
             "down": this.moveDown.bind(this),
             "left": this.moveLeft.bind(this),
             "right": this.moveRight.bind(this),
             "land": this.land.bind(this),
         }
-        while (this.keyPresses.length > 0) {
-            key_events[this.keyPresses.shift()]();
+        while (this.inputQueue.length > 0) {
+            keyEvents[this.inputQueue.shift()]();
         }
         this.loopCallback(this);
 
@@ -307,7 +315,7 @@ class TetrisGame {
     }
 
     run() {
-        this.keyPresses.length = 0;
+        this.inputQueue.length = 0;
         this.refreshIntervalHandler = setInterval(this.gameLoop.bind(this), TetrisGame.refreshInterval);
         this.gravityIntervalHandler = setInterval(this.gravity.bind(this), this.gravityInterval);
         this.pause = this.stop.bind(this);
@@ -335,7 +343,7 @@ statsHTML = statsHTML + `<input style="position:absolute; top:${150 + piecesFile
 const values = ['', 'I', 'II', 'III', 'IV'];
 for (let i = 1; i < 5; ++i) {
     statsHTML = statsHTML +
-        `<input disabled=disabled value=${values[i]} style="position:absolute; top:${150 + (i+piecesFiles.length) * 25}px; left:210px;" size="1"/><input style="position:absolute; top:${150 + (i+piecesFiles.length) * 25}px; left:250px;" size=6 disabled=disabled type=text id="score` + i + '">';
+        `<input disabled=disabled value=${values[i]} style="position:absolute; border:none; top:${150 + (i+piecesFiles.length) * 25}px; left:210px;" size="1"/><input style="position:absolute; top:${150 + (i+piecesFiles.length) * 25}px; left:250px;" size=6 disabled=disabled type=text id="score` + i + '">';
 }
 
 document.getElementById("piece_stats").innerHTML = statsHTML;
@@ -350,7 +358,6 @@ function resetGame() {
         rect.width,
         piecesImages,
         bgImage,
-        keyPresses,
         25, 
         (game) => {
             document.getElementById("score").value = game.score;
