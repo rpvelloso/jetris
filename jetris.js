@@ -320,6 +320,7 @@ class TetrisGame {
         if (this.gravityIntervalHandler)
             clearInterval(this.gravityIntervalHandler);
         this.pause = this.run.bind(this);
+        this.ctx.drawImage(this.bgImage, 0, 0);
     }
 }
 
