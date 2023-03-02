@@ -21,7 +21,7 @@
             Score: <input style="border:none;" type="text" id="score" disabled="disabled" size="5" />
             Lines: <input style="border:none;" type="text" id="lines" disabled="disabled" size="4" />
             Level: <input style="border:none;" type="text" id="level" disabled="disabled" size="2" />
-            <span id="piece_stats"></span>
+            <span id="stats"></span>
         </span>
         <span style="position:absolute; top:40px; left:210px;">
             <fieldset>
@@ -32,7 +32,7 @@
         <span style="position:absolute; top:50px; left:0px;">
             <canvas id="tetris" width="204" height="404"></canvas>
             <div>
-                <button onclick="resetGame(); this.blur();">New Game</button>
+                <button onclick="if (window.confirm('New Game?')) resetGame(); this.blur();">New Game</button>
                 <button onclick="if (game) game.pause(); this.blur();">Pause</button>
             </div>
         </span>

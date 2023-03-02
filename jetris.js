@@ -381,7 +381,7 @@ for (let i = 1; i < 5; ++i) {
         `<input disabled=disabled value=${values[i]} style="position:absolute; border:none; top:${150 + (i+piecesFiles.length) * 25}px; left:210px;" size="1"/><input style="border:none; position:absolute; top:${150 + (i+piecesFiles.length) * 25}px; left:250px;" size=6 disabled=disabled type=text id="score` + i + '">';
 }
 
-document.getElementById("piece_stats").innerHTML = statsHTML;
+document.getElementById("stats").innerHTML = statsHTML;
 
 let game;
 function resetGame() {
