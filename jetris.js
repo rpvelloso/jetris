@@ -13,7 +13,7 @@ const soundFiles = [
     'sounds/line.mp3',
     'sounds/tetris.mp3',
     'sounds/game_over.mp3',
-    'sounds/rotate.mp3'
+    'sounds/move.mp3'
 ];
 
 function createImage(src) {
@@ -103,7 +103,7 @@ class TetrisGame {
         LINE: 1,
         TETRIS: 2,
         GAME_OVER: 3,
-        ROTATE: 4
+        MOVE: 4
     };
 
     constructor(canvas, rect_size, images, bgImage, sounds, speedIncrease, loopCallback) {
@@ -259,7 +259,6 @@ class TetrisGame {
             this.y += this.delta;
             return true;
         }
-        this.sounds[TetrisGame.Sounds.LAND].play();
         return false;
     }
 
@@ -304,21 +303,23 @@ class TetrisGame {
             default: // TetrisGame.MoveStatus.SUCCESS
                 break;
         }
-        if (moveResult == TetrisGame.MoveStatus.SUCCESS) {
-            this.sounds[TetrisGame.Sounds.ROTATE].cloneNode().play();
-        }
     }
 
     gameLoop() {
-        const keyEvents = {
+        const inputEvents = {
             "up": this.rotate.bind(this),
             "down": this.moveDown.bind(this),
             "left": this.moveLeft.bind(this),
             "right": this.moveRight.bind(this),
             "land": this.land.bind(this),
         }
+        let lastInput = null;
         while (this.inputQueue.length > 0) {
-            keyEvents[this.inputQueue.shift()]();
+            const currentInput = this.inputQueue.shift();
+            if (currentInput != lastInput)
+                this.sounds[TetrisGame.Sounds.MOVE].cloneNode().play();
+            lastInput = currentInput;
+            inputEvents[currentInput]();
         }
         this.loopCallback(this);
 
@@ -342,6 +343,7 @@ class TetrisGame {
                 window.alert('Game Over');
                 return;
             }
+            this.sounds[TetrisGame.Sounds.LAND].play();
             this.nextPiece();
         }
         this.gravityIntervalHandler = setInterval(this.gravity.bind(this), this.gravityInterval);
