@@ -7,19 +7,25 @@ const piecesFiles = [
     "data:image/png;base64, iVBORw0KGgoAAAANSUhEUgAAACgAAAA8CAYAAAAUufjgAAAABHNCSVQICAgIfAhkiAAAAIRJREFUaIHt18EJwCAQBVE3pBH7Lyql6CFgA/OFPcwr4DOEHNwaeSs59ibHjjUzO/WNJ7N0j4GUgZSBlIGUgZSBlIGUgVRd2Iw++dt/QW8SykDKQMpAykDKQMpAykDKQKr9TVLpwbT/JgneEOm99v+ggZSBlIGUgZSBlIGUgZSBVPsn/wb+Xw116jOk4gAAAABJRU5ErkJggg==",
     "data:image/png;base64, iVBORw0KGgoAAAANSUhEUgAAAFAAAAAUCAYAAAAa2LrXAAAABHNCSVQICAgIfAhkiAAAAFNJREFUWIXt2KEVACAMxNArj/1XBsMEpK75pu5EZCvJib7tpK9gvTtpbzVtjWVAyICQASEDQgaEDAgZEDIgZEDIgJABIQNCBoQMCBkQMiBU8aWPXM2zBifNv7EtAAAAAElFTkSuQmCC",
 ];
-const bgImage = createImage("data:image/png;base64, iVBORw0KGgoAAAANSUhEUgAAAMwAAAGUCAYAAAB5iM3cAAAABHNCSVQICAgIfAhkiAAABStJREFUeJzt3LtNxFAURdEHopYpcqpxCy5mkmkGIhAEiLevkPhorcjRkZMtObl+OI7jeQFbHn/6BeAveXp9uN/vP/ke8KtdLpe11rtg1lrrdrt9y/h5nut6vdqz92/2juNYa/kkg0QwEAgGAsFAIBgIBAOBYCAQDASCgUAwEAgGAsFAIBgIBAOBYCAQDASCgeDDxeV5nt86bs/ef9pba62H17/GuOmHz7npt2cv7LnphwHBQCAYCAQDgWAgEAwEgoFAMBAIBgLBQCAYCAQDgWAgEAwEgoFAMBAIBgI3/fbsBW76YYObfnv2wp6bfhgQDASCgUAwEAgGAsFAIBgIBAOBYCAQDASCgUAwEAgGAsFAIBgIBAOBYCBw02/PXuCmHza46bdnL+y56YcBwUAgGAgEA4FgIBAMBIKBQDAQCAYCwUAgGAgEA4FgIBAMBIKBQDAQCAYCN/327AVu+mGDm3579sKem34YEAwEgoFAMBAIBgLBQCAYCAQDgWAgEAwEgoFAMBAIBgLBQCAYCAQDgWAgcNNvz17gph82uOm3Zy/suemHAcFAIBgIBAOBYCAQDASCgUAwEAgGAsFAIBgIBAOBYCAQDASCgUAwEAgGAjf99uwFbvphg5t+e/bCnpt+GBAMBIKBQDAQCAYCwUAgGAgEA4FgIBAMBIKBQDAQCAYCwUAgGAgEA4FgIHDTb89e4KYfNrjpt2cv7LnphwHBQCAYCAQDgWAgEAwEgoFAMBAIBgLBQCAYCAQDgWAgEAwEgoFAMBAIBgI3/fbsBW76YYObfnv2wp6bfhgQDASCgUAwEAgGAsFAIBgIBAOBYCAQDASCgUAwEAgGAsFAIBgIBAOBYCBw02/PXuCmHza46bdnL+y56YcBwUAgGAgEA4FgIBAMBIKBQDAQCAYCwUAgGAgEA4FgIBAMBIKBQDAQCAYCN/327AVu+mGDm3579sKem34YEAwEgoFAMBAIBgLBQCAYCAQDgWAgEAwEgoFAMBAIBgLBQCAYCAQDgWAgcNNvz17gph82uOm3Zy/suemHAcFAIBgIBAOBYCAQDASCgUAwEAgGAsFAIBgIBAOBYCAQDASCgUAwEAgGAjf99uwFbvphg5t+e/bCnpt+GBAMBIKBQDAQCAYCwUAgGAgEA4FgIBAMBIKBQDAQCAYCwUAgGAgEA4FgIHDTb89e4KYfNrjpt2cv7LnphwHBQCAYCAQDgWAgEAwEgoFAMBAIBgLBQCAYCAQDgWAgEAwEgoFAMBAIBgI3/fbsBW76YYObfnv2wp6bfhgQDASCgUAwEAgGAsFAIBgIBAOBYCAQDASCgUAwEAgGAsFAIBgIBAOBYCBw02/PXuCmHza46bdnL+y56YcBwUAgGAgEA4FgIBAMBIKBQDAQCAYCwUAgGAgEA4FgIBAMBIKBQDAQCAYCN/327AVu+mGDm3579sKem34YEAwEgoFAMBAIBgLBQCAYCAQDgWAgEAwEgoFAMBAIBgLBQCAYCAQDgWAgcNNvz17gph82uOm3Zy/suemHAcFAIBgIBAOBYCAQDASCgUAwEAgGAsFAIBgIBAOBYCAQDASCgUAwEAgGAjf99uwFbvphg5t+e/bCnpt+GBAMBIKBQDAQCAYCwUAgGAgEA4FgIBAMBIKBQDAQCAYCwUAgGAgEA4FgIHDTb89e4KYfNrjpt2cv7LnphwHBQCAYCAQDgWAgEAwEgoFAMBAIBgLBQCAYCAQDgWAgEAwEgoFAMBAIBgI3/fbsBW83/cDXfJJB8AIr+9PLM9tGAQAAAABJRU5ErkJggg==");
-const rect = createImage("data:image/png;base64, iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAYAAACNiR0NAAAABHNCSVQICAgIfAhkiAAAADFJREFUOI3t1bERADAMwkCR8/4r4yKNB6BEA3wrASbYANgZUxIvIp0KFixYsOBPhBewHpsFJ5d59QUAAAAASUVORK5CYII=");
-    
+
+const soundFiles = [
+    'sounds/land.mp3',
+    'sounds/line.mp3',
+    'sounds/tetris.mp3',
+    'sounds/game_over.mp3',
+    'sounds/rotate.mp3'
+];
+
 function createImage(src) {
     img = new Image();
     img.src = src;
     return img;
 }
 
-let piecesImages = [];
-piecesFiles.forEach((src) => {
-    piecesImages.push(createImage(src));
-});
+const sounds = soundFiles.map((s) => new Audio(s));
+const bgImage = createImage("data:image/png;base64, iVBORw0KGgoAAAANSUhEUgAAAMwAAAGUCAYAAAB5iM3cAAAABHNCSVQICAgIfAhkiAAABStJREFUeJzt3LtNxFAURdEHopYpcqpxCy5mkmkGIhAEiLevkPhorcjRkZMtObl+OI7jeQFbHn/6BeAveXp9uN/vP/ke8KtdLpe11rtg1lrrdrt9y/h5nut6vdqz92/2juNYa/kkg0QwEAgGAsFAIBgIBAOBYCAQDASCgUAwEAgGAsFAIBgIBAOBYCAQDASCgeDDxeV5nt86bs/ef9pba62H17/GuOmHz7npt2cv7LnphwHBQCAYCAQDgWAgEAwEgoFAMBAIBgLBQCAYCAQDgWAgEAwEgoFAMBAIBgI3/fbsBW76YYObfnv2wp6bfhgQDASCgUAwEAgGAsFAIBgIBAOBYCAQDASCgUAwEAgGAsFAIBgIBAOBYCBw02/PXuCmHza46bdnL+y56YcBwUAgGAgEA4FgIBAMBIKBQDAQCAYCwUAgGAgEA4FgIBAMBIKBQDAQCAYCN/327AVu+mGDm3579sKem34YEAwEgoFAMBAIBgLBQCAYCAQDgWAgEAwEgoFAMBAIBgLBQCAYCAQDgWAgcNNvz17gph82uOm3Zy/suemHAcFAIBgIBAOBYCAQDASCgUAwEAgGAsFAIBgIBAOBYCAQDASCgUAwEAgGAjf99uwFbvphg5t+e/bCnpt+GBAMBIKBQDAQCAYCwUAgGAgEA4FgIBAMBIKBQDAQCAYCwUAgGAgEA4FgIHDTb89e4KYfNrjpt2cv7LnphwHBQCAYCAQDgWAgEAwEgoFAMBAIBgLBQCAYCAQDgWAgEAwEgoFAMBAIBgI3/fbsBW76YYObfnv2wp6bfhgQDASCgUAwEAgGAsFAIBgIBAOBYCAQDASCgUAwEAgGAsFAIBgIBAOBYCBw02/PXuCmHza46bdnL+y56YcBwUAgGAgEA4FgIBAMBIKBQDAQCAYCwUAgGAgEA4FgIBAMBIKBQDAQCAYCN/327AVu+mGDm3579sKem34YEAwEgoFAMBAIBgLBQCAYCAQDgWAgEAwEgoFAMBAIBgLBQCAYCAQDgWAgcNNvz17gph82uOm3Zy/suemHAcFAIBgIBAOBYCAQDASCgUAwEAgGAsFAIBgIBAOBYCAQDASCgUAwEAgGAjf99uwFbvphg5t+e/bCnpt+GBAMBIKBQDAQCAYCwUAgGAgEA4FgIBAMBIKBQDAQCAYCwUAgGAgEA4FgIHDTb89e4KYfNrjpt2cv7LnphwHBQCAYCAQDgWAgEAwEgoFAMBAIBgLBQCAYCAQDgWAgEAwEgoFAMBAIBgI3/fbsBW76YYObfnv2wp6bfhgQDASCgUAwEAgGAsFAIBgIBAOBYCAQDASCgUAwEAgGAsFAIBgIBAOBYCBw02/PXuCmHza46bdnL+y56YcBwUAgGAgEA4FgIBAMBIKBQDAQCAYCwUAgGAgEA4FgIBAMBIKBQDAQCAYCN/327AVu+mGDm3579sKem34YEAwEgoFAMBAIBgLBQCAYCAQDgWAgEAwEgoFAMBAIBgLBQCAYCAQDgWAgcNNvz17gph82uOm3Zy/suemHAcFAIBgIBAOBYCAQDASCgUAwEAgGAsFAIBgIBAOBYCAQDASCgUAwEAgGAjf99uwFbvphg5t+e/bCnpt+GBAMBIKBQDAQCAYCwUAgGAgEA4FgIBAMBIKBQDAQCAYCwUAgGAgEA4FgIHDTb89e4KYfNrjpt2cv7LnphwHBQCAYCAQDgWAgEAwEgoFAMBAIBgLBQCAYCAQDgWAgEAwEgoFAMBAIBgI3/fbsBW83/cDXfJJB8AIr+9PLM9tGAQAAAABJRU5ErkJggg==");
+const rect = createImage("data:image/png;base64, iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAYAAACNiR0NAAAABHNCSVQICAgIfAhkiAAAADFJREFUOI3t1bERADAMwkCR8/4r4yKNB6BEA3wrASbYANgZUxIvIp0KFixYsOBPhBewHpsFJ5d59QUAAAAASUVORK5CYII=");
+const piecesImages = piecesFiles.map((src) => createImage(src));
 
 class TetrisKeyboardInput {
     static keys = {
@@ -38,31 +44,6 @@ class TetrisKeyboardInput {
         document.getElementById("body").addEventListener("keydown", (e) => {
             if (TetrisKeyboardInput.keys[e.keyCode]) {
                 game.inputQueue.push(TetrisKeyboardInput.keys[e.keyCode]);
-            }
-        });
-    }
-}
-
-class TetrisMouseInput {
-    constructor(game) {
-        game.ctx.canvas.addEventListener("click", (e) => {
-            const canvasBoundingRect = game.ctx.canvas.getBoundingClientRect();
-            const p = game.piece;
-            const top = game.Y + canvasBoundingRect.y;
-            const bottom = game.Y + game.pieceHeight + canvasBoundingRect.y;
-            const left = game.X + canvasBoundingRect.x;
-            const right = game.X + game.pieceWidth + canvasBoundingRect.x;
-
-            if (e.pageX >= left && e.pageX <= right && e.pageY >= top && e.pageY <= bottom) {
-                game.inputQueue.push("up");
-            } else {
-                if (e.pageX < left) {
-                    game.inputQueue.push("left");
-                } else if (e.pageX > right) {
-                    game.inputQueue.push("right");
-                } else if (e.pageY > bottom) {
-                    game.inputQueue.push("down");
-                }
             }
         });
     }
@@ -117,7 +98,15 @@ class TetrisGame {
         INVALID_BOTTOM: -3
     };
 
-    constructor(canvas, rect_size, images, bgImage, speedIncrease, loopCallback) {
+    static Sounds = {
+        LAND: 0,
+        LINE: 1,
+        TETRIS: 2,
+        GAME_OVER: 3,
+        ROTATE: 4
+    };
+
+    constructor(canvas, rect_size, images, bgImage, sounds, speedIncrease, loopCallback) {
         this.ctx = canvas.getContext("2d");
         this.offScreenCanvas = new OffscreenCanvas(bgImage.width, bgImage.height).getContext("2d");
         this.piecesImages = images;
@@ -144,8 +133,8 @@ class TetrisGame {
         this.pause = () => {};
         this.inputQueue = [];
         this.keyboardInput = new TetrisKeyboardInput(this);
-        //this.mouseInput = new TetrisMouseInput(this);
         this.touchInput = new TetrisTouchInput(this);
+        this.sounds = sounds;
     }
 
     get rotation() { return TetrisGame.degrees[this.degreesIndex] * Math.PI / 180.0; }
@@ -204,6 +193,11 @@ class TetrisGame {
                     this.xOffset, this.delta + this.yOffset)
                 this.offScreenCanvas.clearRect(this.xOffset, this.yOffset, this.width, this.delta);
             }
+        }
+        if (lines == 4) {
+            this.sounds[TetrisGame.Sounds.TETRIS].play();
+        } else if (lines > 0) {
+            this.sounds[TetrisGame.Sounds.LINE].play();
         }
         this.score += TetrisGame.scores[lines];
         this.rowCount += lines;
@@ -265,6 +259,7 @@ class TetrisGame {
             this.y += this.delta;
             return true;
         }
+        this.sounds[TetrisGame.Sounds.LAND].play();
         return false;
     }
 
@@ -284,7 +279,7 @@ class TetrisGame {
                 break;
             case TetrisGame.MoveStatus.INVALID_LEFT:
                 next_x = 0;
-                if (this.validateMove(next_x, this.y) != 0) {
+                if ((moveResult = this.validateMove(next_x, this.y)) != 0) {
                     this.degreesIndex = curr_degree;
                 } else {
                     this.x = next_x;
@@ -292,7 +287,7 @@ class TetrisGame {
                 break;
             case TetrisGame.MoveStatus.INVALID_RIGHT:
                 next_x = this.width - this.pieceWidth;
-                if (this.validateMove(next_x, this.y) != 0) {
+                if ((moveResult = this.validateMove(next_x, this.y)) != 0) {
                     this.degreesIndex = curr_degree;
                 } else {
                     this.x = next_x;
@@ -300,7 +295,7 @@ class TetrisGame {
                 break;
             case TetrisGame.MoveStatus.INVALID_BOTTOM:
                 next_y = this.height - this.pieceHeight;
-                if (this.validateMove(this.x, next_y) != 0) {
+                if ((moveResult = this.validateMove(this.x, next_y)) != 0) {
                     this.degreesIndex = curr_degree;
                 } else {
                     this.y = next_y;
@@ -308,6 +303,9 @@ class TetrisGame {
                 break;
             default: // TetrisGame.MoveStatus.SUCCESS
                 break;
+        }
+        if (moveResult == TetrisGame.MoveStatus.SUCCESS) {
+            this.sounds[TetrisGame.Sounds.ROTATE].cloneNode().play();
         }
     }
 
@@ -340,6 +338,7 @@ class TetrisGame {
         if (!this.moveDown()) {
             if (this.y == 0) {
                 this.stop();
+                this.sounds[TetrisGame.Sounds.GAME_OVER].play();
                 window.alert('Game Over');
                 return;
             }
@@ -392,6 +391,7 @@ function resetGame() {
         rect.width,
         piecesImages,
         bgImage,
+        sounds,
         25, 
         (game) => {
             document.getElementById("score").value = game.score;
