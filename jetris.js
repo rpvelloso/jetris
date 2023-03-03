@@ -343,6 +343,7 @@ class TetrisGame {
         if (!this.moveDown()) {
             if (this.y == 0) {
                 this.stop();
+                this.pause = () => {};
                 this.sounds[TetrisGame.Sounds.GAME_OVER].play();
                 window.alert('Game Over');
                 return;
