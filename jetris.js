@@ -309,6 +309,23 @@ class TetrisGame {
         }
     }
 
+    projectPieceShadow() {
+        let next_y = this.y;
+        while ((this.validateMove(this.x, next_y + this.delta) == TetrisGame.MoveStatus.SUCCESS)) {
+            next_y += this.delta;
+        }
+        if (next_y != this.y) {
+            let pieceBmp = this.pieceBitmap;
+            for (let i = 0; i < pieceBmp.data.length; i += 4) {
+                if (pieceBmp.data[i + 3] != 0)
+                    pieceBmp.data[i + 3] = 65;
+            }
+            let osc = new OffscreenCanvas(this.pieceWidth, this.pieceHeight);
+            osc.getContext("2d").putImageData(pieceBmp, 0, 0);
+            this.ctx.drawImage(osc, this.x, next_y);
+        }
+    }
+
     gameLoop() {
         const inputEvents = {
             "up": this.rotate.bind(this),
@@ -335,6 +352,7 @@ class TetrisGame {
         const p = this.piece;
         this.ctx.drawImage(p, -(p.width / 2), -(p.height / 2));
         this.ctx.restore();
+        this.projectPieceShadow();
     }
 
     gravity() {
