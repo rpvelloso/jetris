@@ -1,5 +1,5 @@
 const piecesFiles = [
-    "data:image/png;base64, iVBORw0KGgoAAAANSUhEUgAAACgAAAA8CAYAAAAUufjgAAAABmJLR0QA/wD/AP+gvaeTAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAB3RJTUUH5wIZDwIKSfsGTgAAAHVJREFUaN7t18EJgEAMBMA9uWptQmzCdvVjCTkI3GwBYfIIZEeSN7UZlcNmklxnzbD7SXmONA8gICAgICAgIODewNH95V8BLM2STlI5z5EAAgICAgICAgJu10n6Fpw/pQvPFVvrJICAgICAgICAgFt1ktYv/wcTzA51BwPEbAAAAABJRU5ErkJggg==",
+    "data:image/png;base64, iVBORw0KGgoAAAANSUhEUgAAACgAAAA8CAYAAAAUufjgAAAABHNCSVQICAgIfAhkiAAAAIlJREFUaIHt1zEKgEAQBME58d/iyzVRMO8RNuh6wNCCwe1KcqVrNcf2JLmOozK2zrOy87XVF8sMpAykDKQMpAykDKQMpAykVoY/+f8IrPrlJmnujf8HDaQMpAykDKQMpAykDKQMpMY/+asHzqP6wXtz7OVNMomBlIGUgZSBlIGUgZSB1PjA8U/+G4/7EnXE0sN0AAAAAElFTkSuQmCC",
     "data:image/png;base64, iVBORw0KGgoAAAANSUhEUgAAACgAAAAoCAYAAACM/rhtAAAABHNCSVQICAgIfAhkiAAAAF5JREFUWIXt10ENwDAMwEB3GpbxxzMyKwh3Uh4+AJGVV7KAj8FuAJ5Dje/i9LzrzKT/FGgVaBVoFWgVaBVoFWgVaC2Gn/zjN9hPYhVoFWgVaBVoFWgVaBVoFWiN/0k2lhoLTxdZH2AAAAAASUVORK5CYII=",
     "data:image/png;base64, iVBORw0KGgoAAAANSUhEUgAAACgAAAA8CAYAAAAUufjgAAAABHNCSVQICAgIfAhkiAAAAIlJREFUaIHt17ENwDAMxEAp8LQZKOs6VSbgC3AA3gAPFi6srrydHFvJsc++Mzv9VF2ZqTkGUgZSBlIGUgZSBlIGUgZSPbAZ/fJ3ejBtVWVviPTe8W/QQMpAykDKQMpAykDKQMpA6h9f/rDoITZykyQd/wYNpAykDKQMpAykDKQMpAykJm6S6Jf/BRMUDXl+ihFFAAAAAElFTkSuQmCC",
     "data:image/png;base64, iVBORw0KGgoAAAANSUhEUgAAADwAAAAoCAYAAACiu5n/AAAABHNCSVQICAgIfAhkiAAAAHFJREFUaIHt2MENgDAMBMEzSn0US4PkRQdGgvVOASc2Eh9XkjuDrCS5mprPVL6+d7Qs/YjBdAbTGUxnMJ3BdAbTGUxnMF1l2ImnXtjsfsDWb1ydY4/um1ancf+wwXQG0xlMZzCdwXQG0xlMZzDduBPPBrBODE9u80nHAAAAAElFTkSuQmCC",
@@ -110,7 +110,7 @@ class TetrisGame {
         START: 6
     };
 
-    constructor(canvas, rect_size, images, bgImage, sounds, speedIncrease, loopCallback) {
+    constructor(canvas, rect_size, images, bgImage, sounds, muted, speedIncrease, loopCallback) {
         this.ctx = canvas.getContext("2d");
         this.offScreenCanvas = new OffscreenCanvas(bgImage.width, bgImage.height).getContext("2d");
         this.piecesImages = images;
@@ -134,11 +134,21 @@ class TetrisGame {
         this.level = 1;
         this.speedIncrease = speedIncrease;
         this.loopCallback = loopCallback;
-        this.pause = () => {};
+        this.pause = () => { return false; };
         this.inputQueue = [];
         this.keyboardInput = new TetrisKeyboardInput(this);
         this.touchInput = new TetrisTouchInput(this);
+        this.muted = muted;
         this.sounds = sounds;
+    }
+
+    playSound(soundId, bg) {
+        if (!this.muted) {
+            if (!bg)
+                this.sounds[soundId].play();
+            else
+                this.sounds[soundId].cloneNode().play();
+        }
     }
 
     get rotation() { return TetrisGame.degrees[this.degreesIndex] * Math.PI / 180.0; }
@@ -199,9 +209,9 @@ class TetrisGame {
             }
         }
         if (lines == 4) {
-            this.sounds[TetrisGame.Sounds.TETRIS].play();
+            this.playSound(TetrisGame.Sounds.TETRIS);
         } else if (lines > 0) {
-            this.sounds[TetrisGame.Sounds.LINE].play();
+            this.playSound(TetrisGame.Sounds.LINE);
         }
         this.score += TetrisGame.scores[lines];
         this.rowCount += lines;
@@ -338,7 +348,7 @@ class TetrisGame {
         while (this.inputQueue.length > 0) {
             const currentInput = this.inputQueue.shift();
             if (currentInput != lastInput)
-                this.sounds[TetrisGame.Sounds.MOVE].cloneNode().play();
+                this.playSound(TetrisGame.Sounds.MOVE, true);
             lastInput = currentInput;
             inputEvents[currentInput]();
         }
@@ -361,12 +371,12 @@ class TetrisGame {
         if (!this.moveDown()) {
             if (this.y == 0) {
                 this.stop();
-                this.pause = () => {};
-                this.sounds[TetrisGame.Sounds.GAME_OVER].play();
+                this.pause = () => { return false; };
+                this.playSound(TetrisGame.Sounds.GAME_OVER);
                 window.alert('Game Over');
                 return;
             }
-            this.sounds[TetrisGame.Sounds.LAND].play();
+            this.playSound(TetrisGame.Sounds.LAND);
             this.nextPiece();
         }
         this.gravityIntervalHandler = setInterval(this.gravity.bind(this), this.gravityInterval);
@@ -377,8 +387,9 @@ class TetrisGame {
         this.refreshIntervalHandler = setInterval(this.gameLoop.bind(this), TetrisGame.refreshInterval);
         this.gravityIntervalHandler = setInterval(this.gravity.bind(this), this.gravityInterval);
         this.pause = function() {
-            this.sounds[TetrisGame.Sounds.PAUSE].play();
+            this.playSound(TetrisGame.Sounds.PAUSE);
             this.stop();
+            return true;
         }
     }
 
@@ -389,59 +400,15 @@ class TetrisGame {
         if (this.gravityIntervalHandler)
             clearInterval(this.gravityIntervalHandler);
         this.pause = function() {
-            this.sounds[TetrisGame.Sounds.PAUSE].play();
+            this.playSound(TetrisGame.Sounds.PAUSE);
             this.run();
+            return false;
         }
         this.ctx.drawImage(this.bgImage, 0, 0);
     }
-}
 
-let statsHTML = "";
-for (let i = 0; i < piecesFiles.length; ++i) {
-    statsHTML = statsHTML +
-        `<img style="position:absolute; top:${150 + i * 25}px; left:210px;" width="30" height="20" src="` + piecesImages[i].src +
-        `"><input style="border:none; position:absolute; top:${150 + i * 25}px; left:250px;" size=6 disabled=disabled type=text id="piece` + i + '">';
-}
-statsHTML = statsHTML + `<input style="border:none; position:absolute; top:${150 + piecesFiles.length * 25}px; left:250px;" size=6 disabled=disabled type=text id="count">`;
-
-const values = ['', 'I', 'II', 'III', 'IV'];
-for (let i = 1; i < 5; ++i) {
-    statsHTML = statsHTML +
-        `<input disabled=disabled value=${values[i]} style="position:absolute; border:none; top:${150 + (i+piecesFiles.length) * 25}px; left:210px;" size="1"/><input style="border:none; position:absolute; top:${150 + (i+piecesFiles.length) * 25}px; left:250px;" size=6 disabled=disabled type=text id="score` + i + '">';
-}
-
-document.getElementById("stats").innerHTML = statsHTML;
-
-let game;
-function resetGame() {
-    if (game)
-        game.stop();
-
-    game = new TetrisGame(
-        document.getElementById("tetris"),
-        rect.width,
-        piecesImages,
-        bgImage,
-        sounds,
-        25, 
-        (game) => {
-            document.getElementById("score").value = game.score;
-            document.getElementById("lines").value = game.rowCount;
-            document.getElementById("level").value = game.level;
-            document.getElementById("next").src = piecesFiles[game.nextPieceIndex];
-            for (let i = 1; i < 5; ++i) {
-                document.getElementById("score" + i).value = game.comboRowCount[i];
-            }
-            const totalPieces = game.pieceCount.reduce((a, b) => a + b, 0);
-            document.getElementById("count").value = '#' + totalPieces;
-            if (totalPieces > 0) {
-                for (let i = 0; i < game.pieceCount.length; ++i) {
-                    document.getElementById("piece" + i).value = (100 * (game.pieceCount[i] / totalPieces)).toFixed(2) + '%';
-                }
-            }
-        }
-    );
-
-    game.sounds[TetrisGame.Sounds.START].play();
-    game.run();
+    mute() {
+        this.muted = !this.muted;
+        return this.muted;
+    }
 }

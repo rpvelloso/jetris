@@ -2,6 +2,7 @@
 <html>
 
 <head>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@48,400,0,0" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <style>
@@ -18,9 +19,9 @@
     </audio>
     <div style="width:100%;">
         <span style="position:absolute; top:10px; left:0px;">
-            Score: <input style="border:none;" type="text" id="score" disabled="disabled" size="5" />
-            Lines: <input style="border:none;" type="text" id="lines" disabled="disabled" size="4" />
-            Level: <input style="border:none;" type="text" id="level" disabled="disabled" size="2" />
+            Score: <input style="border:none;width:50px;" type="text" id="score" disabled="disabled"/>
+            Lines: <input style="border:none;width:30px;" type="text" id="lines" disabled="disabled"/>
+            Level: <input style="border:none;width:30px;" type="text" id="level" disabled="disabled"/>
             <span id="stats"></span>
         </span>
         <span style="position:absolute; top:40px; left:210px;">
@@ -32,13 +33,112 @@
         <span style="position:absolute; top:50px; left:0px;">
             <canvas id="tetris" width="204" height="404"></canvas>
             <div>
-                <button onclick="if (window.confirm('New Game?')) resetGame(); this.blur();">New Game</button>
-                <button onclick="if (game) game.pause(); this.blur();">Pause</button>
+                <button title="New Game" onclick="newGame(this)">
+                    <span class="material-symbols-outlined">
+                        videogame_asset
+                    </span>
+                </button>
+                <button title="Play/Pause" onclick="pause(this)">
+                    <span id="pause_icon" class="material-symbols-outlined">
+                        pause
+                    </span>
+                </button>
+                <button title="Mute" onclick="mute(this);">
+                    <span id="mute_icon" class="material-symbols-outlined">
+                    volume_up
+                    </span>
+                </button>
             </div>
         </span>
     </div>
     <script src="jetris.js"></script>
     <script>
+        // interface specific JS code
+        let statsHTML = "";
+        for (let i = 0; i < piecesFiles.length; ++i) {
+            statsHTML = statsHTML +
+                `<img style="position:absolute; top:${150 + i * 25}px; left:210px;" width="30" height="20" src="` + piecesImages[i].src +
+                `"><input style="border:none;width:50px;position:absolute;top:${150 + i * 25}px;left:250px;" disabled=disabled type=text id="piece` + i + '">';
+        }
+        statsHTML = statsHTML + `<input style="border:none;width:50px;position:absolute;top:${150 + piecesFiles.length * 25}px;left:250px;" disabled=disabled type=text id="count">`;
+
+        const values = ['', 'I', 'II', 'III', 'IV'];
+        for (let i = 1; i < 5; ++i) {
+            statsHTML = statsHTML +
+                `<input disabled=disabled value=${values[i]} style="position:absolute;width:30px;border:none;top:${150 + (i+piecesFiles.length) * 25}px; left:210px;" size="1"/><input style="border:none;width:30px;position:absolute;top:${150 + (i+piecesFiles.length) * 25}px;left:250px;" disabled=disabled type=text id="score` + i + '">';
+        }
+
+        document.getElementById("stats").innerHTML = statsHTML;
+
+        let game;
+        let muted = false;
+
+        function newGame(newGameButton) {
+            if (window.confirm('New Game?')) {
+                resetGame(); 
+            }
+            newGameButton.blur();
+        }
+
+        function pause(pauseButton) {
+            if (game) {
+                if (game.pause()) {
+                    pauseButton.style = "border-style:inset;";
+                    document.getElementById("pause_icon").innerHTML = "play_arrow";
+                } else {
+                    pauseButton.style = "";
+                    document.getElementById("pause_icon").innerHTML = "pause";
+                }
+            }
+            pauseButton.blur();
+        }
+
+        function mute(muteButton) {
+            if ((game && game.mute()) || !muted) {
+                muteButton.style = "border-style:inset;";
+                document.getElementById("mute_icon").innerHTML = "volume_off";
+            } else {
+                muteButton.style = "";
+                document.getElementById("mute_icon").innerHTML = "volume_up";
+            }
+            muted = !muted;
+            muteButton.blur();
+        }
+
+        function resetGame() {
+            if (game)
+                game.stop();
+
+            game = new TetrisGame(
+                document.getElementById("tetris"),
+                rect.width,
+                piecesImages,
+                bgImage,
+                sounds,
+                muted,
+                25, 
+                (game) => {
+                    document.getElementById("score").value = game.score;
+                    document.getElementById("lines").value = game.rowCount;
+                    document.getElementById("level").value = game.level;
+                    document.getElementById("next").src = piecesFiles[game.nextPieceIndex];
+                    for (let i = 1; i < 5; ++i) {
+                        document.getElementById("score" + i).value = game.comboRowCount[i];
+                    }
+                    const totalPieces = game.pieceCount.reduce((a, b) => a + b, 0);
+                    document.getElementById("count").value = '#' + totalPieces;
+                    if (totalPieces > 0) {
+                        for (let i = 0; i < game.pieceCount.length; ++i) {
+                            document.getElementById("piece" + i).value = (100 * (game.pieceCount[i] / totalPieces)).toFixed(2) + '%';
+                        }
+                    }
+                }
+            );
+
+            game.playSound(TetrisGame.Sounds.START);
+            game.run();
+        }
+
         splash = new Image();
         splash.onload = () => {
             document.getElementById("tetris").getContext("2d").drawImage(splash, 0, 0);
