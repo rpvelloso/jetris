@@ -29,7 +29,7 @@ const bgImage = createImage("data:image/png;base64, iVBORw0KGgoAAAANSUhEUgAAAMwA
 const rect = createImage("data:image/png;base64, iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAYAAACNiR0NAAAABHNCSVQICAgIfAhkiAAAADFJREFUOI3t1bERADAMwkCR8/4r4yKNB6BEA3wrASbYANgZUxIvIp0KFixYsOBPhBewHpsFJ5d59QUAAAAASUVORK5CYII=");
 const piecesImages = piecesFiles.map((src) => createImage(src));
 
-class TetrisKeyboardInput {
+class JetrisKeyboardInput {
     static keys = {
         38: "up", // key up
         40: "down", // key down
@@ -44,14 +44,14 @@ class TetrisKeyboardInput {
 
     constructor(game) {
         document.getElementById("body").addEventListener("keydown", (e) => {
-            if (TetrisKeyboardInput.keys[e.keyCode]) {
-                game.inputQueue.push(TetrisKeyboardInput.keys[e.keyCode]);
+            if (JetrisKeyboardInput.keys[e.keyCode]) {
+                game.inputQueue.push(JetrisKeyboardInput.keys[e.keyCode]);
             }
         });
     }
 }
 
-class TetrisTouchInput {
+class JetrisTouchInput {
     static movingDelta = 25;
     constructor(game) {
         game.ctx.canvas.addEventListener("touchstart", (e) => {
@@ -64,13 +64,13 @@ class TetrisTouchInput {
         game.ctx.canvas.addEventListener("touchmove", (e) => {
             if (e.touches.length == 1) {
                 this.currentPoint = e.touches[0];
-                if (this.currentPoint.pageX > this.startPoint.pageX + TetrisTouchInput.movingDelta) {
+                if (this.currentPoint.pageX > this.startPoint.pageX + JetrisTouchInput.movingDelta) {
                     game.inputQueue.push("right");
                     this.startPoint = this.currentPoint;
-                } else if (this.currentPoint.pageX < this.startPoint.pageX - TetrisTouchInput.movingDelta) {
+                } else if (this.currentPoint.pageX < this.startPoint.pageX - JetrisTouchInput.movingDelta) {
                     game.inputQueue.push("left");
                     this.startPoint = this.currentPoint;
-                } else  if (this.currentPoint.pageY > this.startPoint.pageY + TetrisTouchInput.movingDelta) {
+                } else  if (this.currentPoint.pageY > this.startPoint.pageY + JetrisTouchInput.movingDelta) {
                     game.inputQueue.push("down");
                     this.startPoint = this.currentPoint;
                 }
@@ -84,7 +84,7 @@ class TetrisTouchInput {
         });        
     }
 }
-class TetrisGame {
+class JetrisGame {
     static rows = 20;
     static cols = 10;
     static startInterval = 500;
@@ -122,22 +122,22 @@ class TetrisGame {
         this.currentPieceIndex = Math.trunc(Math.random() * this.piecesImages.length);
         this.pieceCount[this.currentPieceIndex] += 1;
         this.nextPieceIndex = Math.trunc(Math.random() * this.piecesImages.length);
-        this.width = rect_size * TetrisGame.cols;
-        this.height = rect_size * TetrisGame.rows;
+        this.width = rect_size * JetrisGame.cols;
+        this.height = rect_size * JetrisGame.rows;
         this.xOffset = (bgImage.width % rect_size) / 2;
         this.yOffset = (bgImage.height % rect_size) / 2;
         this.x = this.delta * 4;
         this.y = 0;
         this.score = 0;
         this.rowCount = 0;
-        this.gravityInterval = TetrisGame.startInterval;
+        this.gravityInterval = JetrisGame.startInterval;
         this.level = 1;
         this.speedIncrease = speedIncrease;
         this.loopCallback = loopCallback;
         this.pause = () => { return false; };
         this.inputQueue = [];
-        this.keyboardInput = new TetrisKeyboardInput(this);
-        this.touchInput = new TetrisTouchInput(this);
+        this.keyboardInput = new JetrisKeyboardInput(this);
+        this.touchInput = new JetrisTouchInput(this);
         this.muted = muted;
         this.sounds = sounds;
     }
@@ -151,7 +151,7 @@ class TetrisGame {
         }
     }
 
-    get rotation() { return TetrisGame.degrees[this.degreesIndex] * Math.PI / 180.0; }
+    get rotation() { return JetrisGame.degrees[this.degreesIndex] * Math.PI / 180.0; }
     get X() { return this.x + this.xOffset; }
     get Y() { return this.y + this.yOffset; }
     get piece() { return this.piecesImages[this.currentPieceIndex]; }
@@ -192,9 +192,9 @@ class TetrisGame {
             this.xOffset, this.yOffset,
             this.width, this.height);
         let rowLength = off.width * 4 * this.delta;
-        for (let i = 0; i < TetrisGame.rows; ++i) {
+        for (let i = 0; i < JetrisGame.rows; ++i) {
             let collapse = true;
-            for (let j = 0; j < TetrisGame.cols; ++j) {
+            for (let j = 0; j < JetrisGame.cols; ++j) {
                 if (off.data[(rowLength * i) + (j * this.delta * 4) + 3 + (rowLength / 2) + (this.delta * 2)] == 0) {
                     collapse = false;
                     break;
@@ -209,28 +209,28 @@ class TetrisGame {
             }
         }
         if (lines == 4) {
-            this.playSound(TetrisGame.Sounds.TETRIS);
+            this.playSound(JetrisGame.Sounds.TETRIS);
         } else if (lines > 0) {
-            this.playSound(TetrisGame.Sounds.LINE);
+            this.playSound(JetrisGame.Sounds.LINE);
         }
-        this.score += TetrisGame.scores[lines];
+        this.score += JetrisGame.scores[lines];
         this.rowCount += lines;
         this.comboRowCount[lines] += 1;
         this.level = 1 + Math.trunc(this.rowCount / 10);
-        this.gravityInterval = TetrisGame.startInterval - (this.level - 1) * this.speedIncrease;
+        this.gravityInterval = JetrisGame.startInterval - (this.level - 1) * this.speedIncrease;
     }
 
     validateMove(xx, yy) {
         const w = this.pieceWidth;
         const h = this.pieceHeight;
         if (xx < 0) {
-            return TetrisGame.MoveStatus.INVALID_LEFT;
+            return JetrisGame.MoveStatus.INVALID_LEFT;
         }
         if (xx + w > this.width) {
-            return TetrisGame.MoveStatus.INVALID_RIGHT;
+            return JetrisGame.MoveStatus.INVALID_RIGHT;
         }
         if (yy + h > this.height) {
-            return TetrisGame.MoveStatus.INVALID_BOTTOM;
+            return JetrisGame.MoveStatus.INVALID_BOTTOM;
         }
         const pieceBmp = this.pieceBitmap;
         const off = this.offScreenCanvas.getImageData(xx + this.xOffset, yy + this.yOffset, w, h);
@@ -246,30 +246,30 @@ class TetrisGame {
                     (pieceBmp.data[pos] > 75) &&
                     (off.data[pos] != 0)
                 ) {
-                    return TetrisGame.MoveStatus.COLLISION;
+                    return JetrisGame.MoveStatus.COLLISION;
                 }
             }
         }
-        return TetrisGame.MoveStatus.SUCCESS;
+        return JetrisGame.MoveStatus.SUCCESS;
     }
 
     moveLeft() {
         let next_x = this.x - this.delta;
-        if (this.validateMove(next_x, this.y) == TetrisGame.MoveStatus.SUCCESS) {
+        if (this.validateMove(next_x, this.y) == JetrisGame.MoveStatus.SUCCESS) {
             this.x = next_x;
         }
     }
 
     moveRight() {
         let next_x = this.x + this.delta;
-        if (this.validateMove(next_x, this.y) == TetrisGame.MoveStatus.SUCCESS) {
+        if (this.validateMove(next_x, this.y) == JetrisGame.MoveStatus.SUCCESS) {
             this.x = next_x;
         }
     }
 
     moveDown() {
         let next_y = this.y + this.delta;
-        if (this.validateMove(this.x, next_y) == TetrisGame.MoveStatus.SUCCESS) {
+        if (this.validateMove(this.x, next_y) == JetrisGame.MoveStatus.SUCCESS) {
             this.y += this.delta;
             return true;
         }
@@ -287,10 +287,10 @@ class TetrisGame {
         let moveResult = this.validateMove(this.x, this.y);
         let next_x, next_y;
         switch (moveResult) {
-            case TetrisGame.MoveStatus.COLLISION:
+            case JetrisGame.MoveStatus.COLLISION:
                 this.degreesIndex = curr_degree;
                 break;
-            case TetrisGame.MoveStatus.INVALID_LEFT:
+            case JetrisGame.MoveStatus.INVALID_LEFT:
                 next_x = 0;
                 if ((moveResult = this.validateMove(next_x, this.y)) != 0) {
                     this.degreesIndex = curr_degree;
@@ -298,7 +298,7 @@ class TetrisGame {
                     this.x = next_x;
                 }
                 break;
-            case TetrisGame.MoveStatus.INVALID_RIGHT:
+            case JetrisGame.MoveStatus.INVALID_RIGHT:
                 next_x = this.width - this.pieceWidth;
                 if ((moveResult = this.validateMove(next_x, this.y)) != 0) {
                     this.degreesIndex = curr_degree;
@@ -306,7 +306,7 @@ class TetrisGame {
                     this.x = next_x;
                 }
                 break;
-            case TetrisGame.MoveStatus.INVALID_BOTTOM:
+            case JetrisGame.MoveStatus.INVALID_BOTTOM:
                 next_y = this.height - this.pieceHeight;
                 if ((moveResult = this.validateMove(this.x, next_y)) != 0) {
                     this.degreesIndex = curr_degree;
@@ -321,7 +321,7 @@ class TetrisGame {
 
     projectPieceShadow() {
         let next_y = this.y;
-        while ((this.validateMove(this.x, next_y + this.delta) == TetrisGame.MoveStatus.SUCCESS)) {
+        while ((this.validateMove(this.x, next_y + this.delta) == JetrisGame.MoveStatus.SUCCESS)) {
             next_y += this.delta;
         }
         if (next_y != this.y) {
@@ -348,7 +348,7 @@ class TetrisGame {
         while (this.inputQueue.length > 0) {
             const currentInput = this.inputQueue.shift();
             if (currentInput != lastInput)
-                this.playSound(TetrisGame.Sounds.MOVE, true);
+                this.playSound(JetrisGame.Sounds.MOVE, true);
             lastInput = currentInput;
             inputEvents[currentInput]();
         }
@@ -372,11 +372,11 @@ class TetrisGame {
             if (this.y == 0) {
                 this.stop();
                 this.pause = () => { return false; };
-                this.playSound(TetrisGame.Sounds.GAME_OVER);
+                this.playSound(JetrisGame.Sounds.GAME_OVER);
                 window.alert('Game Over');
                 return;
             }
-            this.playSound(TetrisGame.Sounds.LAND);
+            this.playSound(JetrisGame.Sounds.LAND);
             this.nextPiece();
         }
         this.gravityIntervalHandler = setInterval(this.gravity.bind(this), this.gravityInterval);
@@ -384,10 +384,10 @@ class TetrisGame {
 
     run() {
         this.inputQueue.length = 0;
-        this.refreshIntervalHandler = setInterval(this.gameLoop.bind(this), TetrisGame.refreshInterval);
+        this.refreshIntervalHandler = setInterval(this.gameLoop.bind(this), JetrisGame.refreshInterval);
         this.gravityIntervalHandler = setInterval(this.gravity.bind(this), this.gravityInterval);
         this.pause = function() {
-            this.playSound(TetrisGame.Sounds.PAUSE);
+            this.playSound(JetrisGame.Sounds.PAUSE);
             this.stop();
             return true;
         }
@@ -400,7 +400,7 @@ class TetrisGame {
         if (this.gravityIntervalHandler)
             clearInterval(this.gravityIntervalHandler);
         this.pause = function() {
-            this.playSound(TetrisGame.Sounds.PAUSE);
+            this.playSound(JetrisGame.Sounds.PAUSE);
             this.run();
             return false;
         }
