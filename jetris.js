@@ -13,7 +13,9 @@ const soundFiles = [
     'sounds/line.mp3',
     'sounds/tetris.mp3',
     'sounds/game_over.mp3',
-    'sounds/move.mp3'
+    'sounds/move.mp3',
+    'sounds/pause.mp3',
+    'sounds/start.mp3'
 ];
 
 function createImage(src) {
@@ -103,7 +105,9 @@ class TetrisGame {
         LINE: 1,
         TETRIS: 2,
         GAME_OVER: 3,
-        MOVE: 4
+        MOVE: 4,
+        PAUSE: 5,
+        START: 6
     };
 
     constructor(canvas, rect_size, images, bgImage, sounds, speedIncrease, loopCallback) {
@@ -353,7 +357,10 @@ class TetrisGame {
         this.inputQueue.length = 0;
         this.refreshIntervalHandler = setInterval(this.gameLoop.bind(this), TetrisGame.refreshInterval);
         this.gravityIntervalHandler = setInterval(this.gravity.bind(this), this.gravityInterval);
-        this.pause = this.stop.bind(this);
+        this.pause = function() {
+            this.sounds[TetrisGame.Sounds.PAUSE].play();
+            this.stop();
+        }
     }
 
     stop() {
@@ -362,7 +369,10 @@ class TetrisGame {
 
         if (this.gravityIntervalHandler)
             clearInterval(this.gravityIntervalHandler);
-        this.pause = this.run.bind(this);
+        this.pause = function() {
+            this.sounds[TetrisGame.Sounds.PAUSE].play();
+            this.run();
+        }
         this.ctx.drawImage(this.bgImage, 0, 0);
     }
 }
@@ -413,5 +423,6 @@ function resetGame() {
         }
     );
 
+    game.sounds[TetrisGame.Sounds.START].play();
     game.run();
 }
