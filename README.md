@@ -2,4 +2,4 @@
 
 https://rpvelloso.github.io/jetris/
 
-![image](https://user-images.githubusercontent.com/11525833/222820529-2fbb7ca9-b2e4-4057-ac19-5001bc01ff6e.png)
+![image](https://user-images.githubusercontent.com/11525833/222869151-90c518df-1acb-433c-9eb1-797aaec37d0f.png)
