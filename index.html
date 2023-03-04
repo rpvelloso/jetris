@@ -9,6 +9,9 @@
         body {
             overscroll-behavior: contain;
         }
+        input { 
+            text-align: right; 
+        }
     </style>
 </head>
 
@@ -18,24 +21,17 @@
         Your browser does not support the audio element.
     </audio>
     <div style="width:100%;">
-        <span style="position:absolute; top:10px; left:0px;">
-            Score: <input style="border:none;width:50px;" type="text" id="score" disabled="disabled"/>
-            Lines: <input style="border:none;width:30px;" type="text" id="lines" disabled="disabled"/>
-            Level: <input style="border:none;width:30px;" type="text" id="level" disabled="disabled"/>
-            <span id="stats"></span>
-        </span>
-        <span style="position:absolute; top:40px; left:210px;">
-            <fieldset>
-                <legend>Next</legend>
-                <img id="next" />
-            </fieldset>
-        </span>
-        <span style="position:absolute; top:50px; left:0px;">
-            <canvas id="jetris" width="204" height="404"></canvas>
+        <div>
+            <span>Score: <input style="border:none;width:50px;" type="text" id="score" disabled="disabled"/></span>
+            <span>Lines: <input style="border:none;width:30px;" type="text" id="lines" disabled="disabled"/></span>
+            <span>Level: <input style="border:none;width:30px;" type="text" id="level" disabled="disabled"/></span>
+        </div>
+        <div style="float:left;">
+            <canvas id="jetris" width="204" height="404" style="width:242px;height:484px;"></canvas>
             <div>
                 <button title="New Game" onclick="newGame(this)">
                     <span class="material-symbols-outlined">
-                        videogame_asset
+                        stadia_controller
                     </span>
                 </button>
                 <button title="Play/Pause" onclick="pause(this)">
@@ -49,7 +45,14 @@
                     </span>
                 </button>
             </div>
-        </span>
+        </div>
+        <div style="float:inline-start; margin: 10px;">
+            <fieldset style="width:80px;height:80px;">
+                <legend>Next</legend>
+                <img id="next" />
+            </fieldset>
+            <div id="stats" style="margin: 10px;"></div>
+        </div>
     </div>
     <script src="jetris.js"></script>
     <script>
@@ -57,15 +60,15 @@
         let statsHTML = "";
         for (let i = 0; i < piecesFiles.length; ++i) {
             statsHTML = statsHTML +
-                `<img style="position:absolute; top:${150 + i * 25}px; left:210px;" width="30" height="20" src="` + piecesImages[i].src +
-                `"><input style="border:none;width:50px;position:absolute;top:${150 + i * 25}px;left:250px;" disabled=disabled type=text id="piece` + i + '">';
+                `<div><img width="30" height="20" src="` + piecesImages[i].src +
+                `"><input style="border:none;width:70px;" disabled=disabled type=text id="piece` + i + '"></div>';
         }
-        statsHTML = statsHTML + `<input style="border:none;width:50px;position:absolute;top:${150 + piecesFiles.length * 25}px;left:250px;" disabled=disabled type=text id="count">`;
+        statsHTML = statsHTML + `<div><input style="border:none;width:50px;" disabled=disabled type=text id="count"></div>`;
 
         const values = ['', 'I', 'II', 'III', 'IV'];
         for (let i = 1; i < 5; ++i) {
             statsHTML = statsHTML +
-                `<input disabled=disabled value=${values[i]} style="position:absolute;width:30px;border:none;top:${150 + (i+piecesFiles.length) * 25}px; left:210px;" size="1"/><input style="border:none;width:30px;position:absolute;top:${150 + (i+piecesFiles.length) * 25}px;left:250px;" disabled=disabled type=text id="score` + i + '">';
+                `<div><input disabled=disabled value=${values[i]} style="width:30px;border:none;" size="1"/><input style="border:none;width:30px;" disabled=disabled type=text id="score` + i + '"></div>';
         }
 
         document.getElementById("stats").innerHTML = statsHTML;
