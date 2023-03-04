@@ -10,12 +10,18 @@
             overscroll-behavior: contain;
         }
         input { 
-            text-align: right; 
+            text-align: right;
+            background-color: lightgray;
+        }
+        button {
+            color: black;
+            border-radius: 8px;
+            width: 78px;
         }
     </style>
 </head>
 
-<body id="body">
+<body id="body" style="background-color: lightgray;">
     <audio autoplay loop>
         <source src="sounds/bgmusic.mp3" type="audio/mp3">
         Your browser does not support the audio element.
@@ -47,7 +53,7 @@
             </div>
         </div>
         <div style="float:inline-start; margin: 10px;">
-            <fieldset style="width:80px;height:80px;">
+            <fieldset style="width:80px;height:80px;border-radius: 8px;">
                 <legend>Next</legend>
                 <img id="next" />
             </fieldset>
