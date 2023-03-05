@@ -120,9 +120,9 @@ class JetrisGame {
         this.degreesIndex = 0;
         this.pieceCount = new Array(images.length).fill(0);
         this.comboRowCount = [0, 0, 0, 0, 0];
-        this.currentPieceIndex = Math.trunc(Math.random() * this.piecesImages.length);
+        this.currentPieceIndex = this.randomPiece();
         this.pieceCount[this.currentPieceIndex] += 1;
-        this.nextPieceIndex = Math.trunc(Math.random() * this.piecesImages.length);
+        this.nextPieceIndex = this.randomPiece();
         this.width = rect_size * JetrisGame.cols;
         this.height = rect_size * JetrisGame.rows;
         this.xOffset = (bgImage.width % rect_size) / 2;
@@ -141,6 +141,10 @@ class JetrisGame {
         this.touchInput = new JetrisTouchInput(this);
         this.muted = muted;
         this.sounds = sounds;
+    }
+
+    randomPiece() {
+        return Math.floor(Math.random() * this.piecesImages.length);
     }
 
     playSound(soundId, bg) {
@@ -181,7 +185,7 @@ class JetrisGame {
         this.collapseCompleteLines();
         this.currentPieceIndex = this.nextPieceIndex;
         this.pieceCount[this.currentPieceIndex] += 1;
-        this.nextPieceIndex = Math.trunc(Math.random() * this.piecesImages.length);
+        this.nextPieceIndex = this.randomPiece();
         this.x = this.delta * 4;
         this.y = 0;
         this.degreesIndex = 0;
