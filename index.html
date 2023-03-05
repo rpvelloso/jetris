@@ -16,7 +16,7 @@
         button {
             color: black;
             border-radius: 8px;
-            width: 78px;
+            width: 65px;
         }
     </style>
 </head>
@@ -33,7 +33,7 @@
             <span>Level: <input style="border:none;width:30px;" type="text" id="level" disabled="disabled"/></span>
         </div>
         <div style="float:left;">
-            <canvas id="jetris" width="204" height="404" style="width:242px;height:484px;"></canvas>
+            <canvas id="jetris" width="204" height="404"></canvas>
             <div>
                 <button title="New Game" onclick="newGame(this)">
                     <span class="material-symbols-outlined">
@@ -52,12 +52,12 @@
                 </button>
             </div>
         </div>
-        <div style="float:inline-start; margin: 10px;">
+        <div style="float:inline-start;margin: 5px;">
             <fieldset style="width:80px;height:80px;border-radius: 8px;">
                 <legend>Next</legend>
                 <img id="next" />
             </fieldset>
-            <div id="stats" style="margin: 10px;"></div>
+            <div id="stats"></div>
         </div>
     </div>
     <script src="jetris.js"></script>
