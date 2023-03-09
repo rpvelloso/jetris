@@ -40,7 +40,7 @@
         Your browser does not support the audio element.
     </audio>
     <div style="width:100%;">
-        <div style="float: left;">
+        <div id="score" style="position: absolute; top:0; left:5px;">
             <span>
                 <fieldset style="width: 50px; float: left;">
                     <legend>Score</legend><input style="border:none;width:50px;" type="text" id="score"
@@ -59,11 +59,18 @@
                         disabled="disabled" />
                 </fieldset>
             </span>
+            <span>
+                <fieldset style="width: 80px; height: 80px; float: left;">
+                    <legend>Next</legend>
+                    <img id="next" />
+                </fieldset>
+            </span>
         </div>
-        <div style="position: absolute; top: 70px;">
-            <span><canvas id="jetris" width="204" height="404"></canvas></span>
+        <div style="position: absolute; top:60px; left:5px;">
+            <span style="float: left;"><canvas id="jetris" width="204" height="404"></canvas></span>
         </div>
-        <div style="position: absolute; top: 480px;">
+        <div id="stats" style="position: absolute; top:110px; left:220px;"></div>
+        <div style="position: absolute; top:470px; left:5px;">
             <span>
                 <button title="New Game" onclick="newGame(this)">
                     <span class="material-symbols-outlined">
@@ -86,110 +93,100 @@
                 </button>
             </span>
         </div>
-        <div style="float: left;">
-            <div>
-                <fieldset style="width: 80px; height: 80px;">
-                    <legend>Next</legend>
-                    <img id="next" />
-                </fieldset>
-            </div>
-            <div style="margin: 5px;" id="stats"></div>
-        </div>
-    </div>
-    <script src="jetris.js"></script>
-    <script>
-        // interface specific JS code
-        let statsHTML = "";
-        for (let i = 0; i < piecesFiles.length; ++i) {
-            statsHTML = statsHTML +
-                `<div><img width="30" height="20" src="` + piecesImages[i].src +
-                `"><input style="border:none;width:70px;" disabled=disabled type=text id="piece` + i + '"></div>';
-        }
-        statsHTML = statsHTML + `<div><input style="border:none;width:50px;" disabled=disabled type=text id="count"></div>`;
-
-        const values = ['', 'I', 'II', 'III', 'IV'];
-        for (let i = 1; i < 5; ++i) {
-            statsHTML = statsHTML +
-                `<div><input disabled=disabled value=${values[i]} style="width:30px;border:none;" size="1"/><input style="border:none;width:30px;" disabled=disabled type=text id="score` + i + '"></div>';
-        }
-
-        document.getElementById("stats").innerHTML = statsHTML;
-
-        let game;
-        let muted = false;
-
-        function newGame(newGameButton) {
-            if (window.confirm('New Game?')) {
-                resetGame();
+        <script src="jetris.js"></script>
+        <script>
+            // interface specific JS code
+            let statsHTML = '';
+            for (let i = 0; i < piecesFiles.length; ++i) {
+                statsHTML = statsHTML +
+                    `<div><img width="30" height="20" src="` + piecesImages[i].src +
+                    `"><input style="border:none;width:70px;" disabled=disabled type=text id="piece` + i + '"></div>';
             }
-            newGameButton.blur();
-        }
+            statsHTML = statsHTML + `<div><input style="border:none;width:50px;" disabled=disabled type=text id="count"></div>`;
 
-        function pause(pauseButton) {
-            if (game) {
-                if (game.pause()) {
-                    pauseButton.style = "border-style:inset;";
-                    document.getElementById("pause_icon").innerHTML = "play_arrow";
-                } else {
-                    pauseButton.style = "";
-                    document.getElementById("pause_icon").innerHTML = "pause";
+            const values = ['', 'I', 'II', 'III', 'IV'];
+            for (let i = 1; i < 5; ++i) {
+                statsHTML = statsHTML +
+                    `<div><input disabled=disabled value=${values[i]} style="width:30px;border:none;" size="1"/><input style="border:none;width:30px;" disabled=disabled type=text id="score` + i + '"></div>';
+            }
+
+            document.getElementById("stats").innerHTML = statsHTML;
+
+            let game;
+            let muted = false;
+
+            function newGame(newGameButton) {
+                if (window.confirm('New Game?')) {
+                    resetGame();
                 }
+                newGameButton.blur();
             }
-            pauseButton.blur();
-        }
 
-        function mute(muteButton) {
-            if ((game && game.mute()) || !muted) {
-                muteButton.style = "border-style:inset;";
-                document.getElementById("mute_icon").innerHTML = "volume_off";
-            } else {
-                muteButton.style = "";
-                document.getElementById("mute_icon").innerHTML = "volume_up";
-            }
-            muted = !muted;
-            muteButton.blur();
-        }
-
-        function resetGame() {
-            if (game)
-                game.stop();
-
-            game = new JetrisGame(
-                document.getElementById("jetris"),
-                rect.width,
-                piecesImages,
-                bgImage,
-                sounds,
-                muted,
-                25,
-                (game) => {
-                    document.getElementById("score").value = game.score;
-                    document.getElementById("lines").value = game.rowCount;
-                    document.getElementById("level").value = game.level;
-                    document.getElementById("next").src = piecesFiles[game.nextPieceIndex];
-                    for (let i = 1; i < 5; ++i) {
-                        document.getElementById("score" + i).value = game.comboRowCount[i];
+            function pause(pauseButton) {
+                if (game) {
+                    if (game.pause()) {
+                        pauseButton.style = "border-style:inset;";
+                        document.getElementById("pause_icon").innerHTML = "play_arrow";
+                    } else {
+                        pauseButton.style = "";
+                        document.getElementById("pause_icon").innerHTML = "pause";
                     }
-                    const totalPieces = game.pieceCount.reduce((a, b) => a + b, 0);
-                    document.getElementById("count").value = '#' + totalPieces;
-                    if (totalPieces > 0) {
-                        for (let i = 0; i < game.pieceCount.length; ++i) {
-                            document.getElementById("piece" + i).value = (100 * (game.pieceCount[i] / totalPieces)).toFixed(2) + '%';
+                }
+                pauseButton.blur();
+            }
+
+            function mute(muteButton) {
+                if ((game && game.mute()) || !muted) {
+                    muteButton.style = "border-style:inset;";
+                    document.getElementById("mute_icon").innerHTML = "volume_off";
+                } else {
+                    muteButton.style = "";
+                    document.getElementById("mute_icon").innerHTML = "volume_up";
+                }
+                muted = !muted;
+                muteButton.blur();
+            }
+
+            function resetGame() {
+                if (game)
+                    game.stop();
+
+                game = new JetrisGame(
+                    document.getElementById("jetris"),
+                    rect.width,
+                    piecesImages,
+                    bgImage,
+                    sounds,
+                    muted,
+                    25,
+                    (game) => {
+                        document.getElementById("score").value = game.score;
+                        document.getElementById("lines").value = game.rowCount;
+                        document.getElementById("level").value = game.level;
+                        document.getElementById("next").src = piecesFiles[game.nextPieceIndex];
+                        for (let i = 1; i < 5; ++i) {
+                            document.getElementById("score" + i).value = game.comboRowCount[i];
+                        }
+                        const totalPieces = game.pieceCount.reduce((a, b) => a + b, 0);
+                        document.getElementById("count").value = '#' + totalPieces;
+                        if (totalPieces > 0) {
+                            for (let i = 0; i < game.pieceCount.length; ++i) {
+                                document.getElementById("piece" + i).value = (100 * (game.pieceCount[i] / totalPieces)).toFixed(2) + '%';
+                            }
                         }
                     }
-                }
-            );
+                );
 
-            game.playSound(JetrisGame.Sounds.START);
-            game.run();
-        }
+                game.playSound(JetrisGame.Sounds.START);
+                game.run();
+            }
 
-        splash = new Image();
-        splash.onload = () => {
-            document.getElementById("jetris").getContext("2d").drawImage(splash, 0, 0);
-        };
-        splash.src = "data:image/png;base64, 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";
-    </script>
+            splash = new Image();
+            splash.onload = () => {
+                document.getElementById("jetris").getContext("2d").drawImage(splash, 0, 0);
+            };
+            splash.src = "data:image/png;base64, iVBORw0KGgoAAAANSUhEUgAAAMwAAAGUCAYAAAB5iM3cAAAABHNCSVQICAgIfAhkiAAAAAFzUkdCAK7OHOkAAAAEZ0FNQQAAsY8L/GEFAAAACXBIWXMAABJ0AAASdAHeZh94AAAIz0lEQVR4Xu3dMYtc1xnH4ZVTpkihT5AUalKlsTG4SBBJERCuQjDRt1DA+HYmsKRIvoELIZQEqbJEepeG9BKxEKlUmZDCuJfvPTtHKOuBzP+eM5sze58HjudqWV529+rn0RTvzo379++/PgMO8s7uETjAm2eYFy9elA8A33fr1q3y+F/BPHv2rHyw1ZMnT86maTJvJfPaHGPe3Em59k8yCAgGAoKBgGAgIBgICAYCgoGAYCAgGAgIBgKCgYBgICAYCAgGAoKBgGAgIBhILBuXy5mmadm87HbMazvmtZ3e82onR9vpPz8/3131Mf8Adldw9fbu9N978Lh8sNXNVy/L41/Lf8/OPto9rnVjPkswPb++ZZ4d93W2OG/upFx7DQMBwUBAMBAQDAQEAwHBQEAwEBAMBAQDAcFAQDAQEAwEBAMBwUBAMBC4kmD+1nhgFJ5hIFF3lafOO9C9T++vz7y2s7V5tRM7/XCAo79P/6L3Tv8v73x+8YFGv3j/+UnMs4O/zjHmzZ2Ua69hICAYCAgGAoKBgGAgIBgICAYCgoGAYCAgGAgIBgKCgYBgICAYCAgGAlcSzL49/eTAKDzDQKLuKk+dd6B7n95fn3ltZ2vzaid2+uEAdvo3tpNu3nrLvLmTcu01DAQEAwHBQEAwEBAMBAQDAcFAQDAQEAwEBAMBwUBAMBAQDAQEAwHBQOBKgtm3p58cGIVnGEjUXeWp8w5079P76zOv7WxtXu3kZHb6e5p/mLsrOMzJ7fQvvn397u5qnR/+45/l8cZ735Ro/I6AdbY4b+6kXHsNAwHBQEAwEBAMBAQDAcFAQDAQEAwEBAMBwUBAMBAQDAQEAwHBQEAwELiSYPbt6SenWvZZWg608gwDibqrPHXegR799P5+zWs7o8+rnRxtp7+3nr8jYP5h7q7gMHt3+u89eFw+2Ormq5flL2XPeYveO/123NfZ4ry5k3LtNQwEBAMBwUBAMBAQDAQEAwHBQEAwEBAMBAQDAcFAQDAQEAwEBAMBwUDgpIK5vKOfHmjlGQYSdVd5GnynuvcZ/fs1r+30nlc72eRO/zHMN2h3xXV09PfpX/4C9Zy36LnTv/C+/+tscd7cSbn2GgYCgoGAYCAgGAgIBgKCgYBgICAYCAgGAoKBgGAgIBgICAYCgoGAYCBwUsG8vZ+/5ly273OSw/Z4hoFE3VWeBt+pHv2M/vMzr+3UTk5mp783vyOAxMnt9C/zzh/8fPeRRq9+dfF4q3zr6/3njxeP//7k4rHjvGP8/MxbZ5k3d1KuvYaBgGAgIBgICAYCgoGAYCAgGAgIBgKCgYBgICAYCAgGAoKBgGAgIBgIbDuYZf+k5Vy273OSw/A8w0Ci7ipPG9vRHv1s7X6MPq92Yqd/UPMN310xgpPc6e85rxh8p/9H57+++HOjj88+GP5+jD5v7qRcew0DAcFAQDAQEAwEBAMBwUBAMBAQDAQEAwHBQEAwEBAMBAQDAcFAQDAQ2HYwb+/TrzmX7fuc5DA8zzCQqLvK08Z2tEc/W7sfo8+rnWx2p7+33r8jYL7huytGsPmd/mVe7/f9/93dP5XHVn95+Pvy9fXe6fc7AtZZ5s2dlGuvYSAgmI5++/Be02F8goGAYCAgGAgIBgKCgYBgICAYCAgGAoKBgGAgIBgICAYCgoGAYCAgGEjUXeXJzvdQx/1oO73n1U7s9Hfiff+vNzv987yRd/oXvX9HwNbub895cyfl2msYCHiG6WH3DPO0/HN3vUd3/1we6zNMz3mncD9GnucZBlYQDAQEAwHBQEAwEBAMBAQDAcFAQDAQEAwEBAMBwUBAMBAQDAQEA4llH2Y5k53va33c37ZTO7HT34n36b/e7PTP87xP/zrepx84iGA62vfe+8lhfIKBgGAgIBgICAYCgoGAYCAgGAgIBgKCgYBgICAYCAgGAoKBgGAgIBhI1F3lyc73UMf9aDu959VO7PTDAez0H2He6DvzdvrXWebNnZRrr2EgIBgICAYCgoGAYCAgGAgIBgKCgYBgICAYCAgGAoKBgGAgIBgICAYCgoGAYCBRd5UnO99Nx7y2M/q82omd/kF53/+x2OkffN7i9aM75XG15xf/E7zx6VfuR4Nl3txJufYaBgKCgYBgICAYCAgGAoKBgGAgIBgICAYCgoGAYCAgGAgIBgKCgYBgICCYkS37LC2H7gQDibqrPNn5bjq95/U+7kfbqZ3Y6e+k9w5+b/NfoN0Va9jp7zxv0XMHf9F7p//8Z5+VPzf7zdcnMc9OP/yfCQYCgoGAYCAgGAgIBgKCgYBgICAYCAgGAoKBgGAgIBgICAYCgoGAYHp6e59+zbls3+ckh+4EA4m6qzzZ+b7Wx/1tO7UTO/2deF/9681Of+d5i947+Ld/8EX5c6vbf/iyzBt5Z370eXMn5dprGAgIBgKCgYBgICAYCAgGAoKBgGAgIBgICAYCgoGAYCAgGAgIBgKCgYBgerq8U58ehicYSNRd5cnO91DH/Wg7vefVTuz0M4TRfyeCnf4TmDf6Tn/PecXrH188rvSTpz8tj//68O/d78fcSbn2GgYCgoGAYCAgGAgIBgKCgYBgICAYCAgGAoKBgGAgIBgICAYCgoGAYCAgGIax7LO0nKsgGEjUXeXJznfTMW+s0/vrq53Y6WcIdvo771RvcV7vnf6Rv9/CTj9cL4KBgGAgIBgICAYCgoGAYCAgGAgIBgKCgYBgICAYCAgGAoKBgGAgIBiGcXlHPz1XQTCQqLvKk530pmPeWKf311c7sdPPEOz0D75DvsV5I7+vfmGnH64XwUBAMBAQDAQEAwHBQEAwEBAMBAQDAcFAQDAQEAwEBAMBwUBAMBAQDKu9vU+/5ly273OScxUEA4m6qzzZSW86W5s3+un9/dZO7PTDAez0m7faFufNnZRrr2EgIBgICAYCgoGAYCAgGAgIBgKCgYBgICAYCAgGAoKBgGAgIBgICAYCgoGAYCBRd5UnO+5Nx7y2M/q82smbFWXgf/NPMjjY2dl3ZU/aYyGbejAAAAAASUVORK5CYII=";
+        </script>
 </body>
 
 </html>
