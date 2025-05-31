@@ -53,7 +53,7 @@ class JetrisTouchInput {
         });        
     }
 }
-class JetrisGame {
+export class JetrisGame {
     static rows = 20;
     static cols = 10;
     static startInterval = 500;
