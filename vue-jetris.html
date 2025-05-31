@@ -1,0 +1,50 @@
+<head>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@mdi/font@7.4.47/css/materialdesignicons.min.css" />
+  <link rel="stylesheet" href="https://fonts.bunny.net/css?family=roboto:400,500,700" />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@48,400,0,0" />
+  <link href="https://fonts.cdnfonts.com/css/seven-segment" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/vue@3.5.15/dist/vue.global.js"></script>
+
+  <style>
+      body {
+          overscroll-behavior: contain;
+          font-family: 'Seven Segment', sans-serif;
+          background-color: lightgray;
+      }
+
+      input {
+          text-align: center;
+          background-color: lightgray;
+          font-family: 'Seven Segment', sans-serif;
+          font-weight: bold;
+          font-size: large;
+      }
+
+      button {
+          color: black;
+          border-radius: 8px;
+          width: 65px;
+      }
+
+      fieldset {
+          border-radius: 8px;
+      }
+  </style>
+</head>
+
+<script type="module">
+  const { createApp, ref } = Vue
+  
+  import VueJetrisGame from './vue-jetris.js'
+
+  const app = createApp({
+    components: {VueJetrisGame}
+  }).mount('#app');
+
+  </script>
+
+  <body id="body">
+    <div id="app">
+        <vue-jetris-game></vue-jetris-game>
+    </div>
+  </body>
