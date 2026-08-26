@@ -13,8 +13,9 @@ class JetrisKeyboardInput {
 
     constructor(game) {
         document.getElementById("body").addEventListener("keydown", (e) => {
-            if (JetrisKeyboardInput.keys[e.keyCode]) {
-                game.inputQueue.push(JetrisKeyboardInput.keys[e.keyCode]);
+            const action = JetrisKeyboardInput.keys[e.keyCode];
+            if (action && !(e.repeat && action === "land")) {
+                game.inputQueue.push(action);
             }
         });
     }
