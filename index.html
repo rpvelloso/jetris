@@ -1,37 +1,14 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 
 <head>
+    <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JETRIS</title>
     <link rel="stylesheet"
         href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@48,400,0,0" />
     <link href="https://fonts.cdnfonts.com/css/seven-segment" rel="stylesheet">
-
-    <style>
-        body {
-            overscroll-behavior: contain;
-            font-family: 'Seven Segment', sans-serif;
-            background-color: lightgray;
-        }
-
-        input {
-            text-align: center;
-            background-color: lightgray;
-            font-family: 'Seven Segment', sans-serif;
-            font-weight: bold;
-            font-size: large;
-        }
-
-        button {
-            color: black;
-            border-radius: 8px;
-            width: 65px;
-        }
-
-        fieldset {
-            border-radius: 8px;
-        }
-    </style>
+    <link rel="stylesheet" href="styles.css">
 </head>
 
 <script type="module">
@@ -46,60 +23,74 @@
         <source src="sounds/bgmusic.mp3" type="audio/mp3">
         Your browser does not support the audio element.
     </audio>
-    <div style="width:100%;">
-        <div style="position: absolute; top:0; left:5px;">
-            <span>
-                <fieldset style="width: 50px; float: left;">
-                    <legend>Score</legend><input style="border:none;width:50px;" type="text" id="score"
-                        disabled="disabled" />
-                </fieldset>
-            </span>
-            <span>
-                <fieldset style="width: 30px; float: left;">
-                    <legend>Lines</legend><input style="border:none;width:30px;" type="text" id="lines"
-                        disabled="disabled" />
-                </fieldset>
-            </span>
-            <span>
-                <fieldset style="width: 30px; float: left;">
-                    <legend>Level</legend><input style="border:none;width:30px;" type="text" id="level"
-                        disabled="disabled" />
-                </fieldset>
-            </span>
-            <span>
-                <fieldset style="width: 80px; height: 80px; float: left;">
-                    <legend>Next</legend>
-                    <img id="next" />
-                </fieldset>
-            </span>
-        </div>
-        <div style="position: absolute; top:60px; left:5px;">
-            <span style="float: left;"><canvas id="jetris" width="204" height="404"></canvas></span>
-        </div>
-        <div id="stats" style="position: absolute; top:110px; left:220px;"></div>
-        <div style="position: absolute; top:470px; left:5px;">
-            <span>
-                <button title="New Game" onclick="newGame(this)">
-                    <span class="material-symbols-outlined">
-                        stadia_controller
-                    </span>
+    <main class="cabinet">
+
+        <!-- left column: title, stats, controls -->
+        <aside class="col-side">
+            <header class="header">
+                <div>
+                    <h1 class="title">JETRIS</h1>
+                    <p class="subtitle">insert coin</p>
+                </div>
+            </header>
+
+            <section class="panel panel-score">
+                <span class="panel-title">Score</span>
+                <input class="readout" type="text" id="score" disabled="disabled" />
+            </section>
+
+            <section class="stat-group">
+                <section class="panel stat">
+                    <span class="stat-label">Lines</span>
+                    <input class="readout" type="text" id="lines" disabled="disabled" />
+                </section>
+                <section class="panel stat">
+                    <span class="stat-label">Level</span>
+                    <input class="readout" type="text" id="level" disabled="disabled" />
+                </section>
+            </section>
+
+            <section class="panel panel-next">
+                <span class="panel-title">Next</span>
+                <div class="next-wrap"><img id="next" /></div>
+            </section>
+
+            <nav class="controls">
+                <button class="btn" title="New Game" onclick="newGame(this)">
+                    <span class="material-symbols-outlined">stadia_controller</span>
                 </button>
-            </span>
-            <span>
-                <button title="Play/Pause" onclick="pause(this)">
-                    <span id="pause_icon" class="material-symbols-outlined">
-                        pause
-                    </span>
+                <button class="btn" title="Play/Pause" onclick="pause(this)">
+                    <span id="pause_icon" class="material-symbols-outlined">pause</span>
                 </button>
-            </span>
-            <span>
-                <button title="Mute" onclick="mute(this);">
-                    <span id="mute_icon" class="material-symbols-outlined">
-                        volume_up
-                    </span>
+                <button class="btn" title="Mute" onclick="mute(this);">
+                    <span id="mute_icon" class="material-symbols-outlined">volume_up</span>
                 </button>
-            </span>
-        </div>
+            </nav>
+
+            <div class="keys">
+                <span><b class="k">&#8592;</b><b class="k">&#8594;</b> move</span>
+                <span><b class="k">&#8595;</b> soft drop</span>
+                <span><b class="k">&#8593;</b> rotate</span>
+                <span><b class="k">Space</b> hard drop</span>
+            </div>
+        </aside>
+
+        <!-- center: the game screen -->
+        <section class="col-main">
+            <div class="screen">
+                <canvas id="jetris" width="204" height="404"></canvas>
+            </div>
+        </section>
+
+        <!-- right: piece history stats -->
+        <aside class="col-stats">
+            <div class="panel panel-stats">
+                <span class="panel-title">History</span>
+                <div id="stats" class="stats"></div>
+            </div>
+        </aside>
+
+    </main>
 </body>
 
 </html>

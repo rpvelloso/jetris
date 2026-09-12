@@ -119,9 +119,9 @@ export class JetrisGame {
     playSound(soundId, bg) {
         if (!this.muted) {
             if (!bg)
-                this.sounds[soundId].play();
+                this.sounds[soundId].play().catch(() => { });
             else
-                this.sounds[soundId].cloneNode().play();
+                this.sounds[soundId].cloneNode().play().catch(() => { });
         }
     }
 
@@ -306,7 +306,7 @@ export class JetrisGame {
             }
             let osc = new OffscreenCanvas(this.pieceWidth, this.pieceHeight);
             osc.getContext("2d").putImageData(pieceBmp, 0, 0);
-            this.ctx.drawImage(osc, this.x, next_y);
+            this.ctx.drawImage(osc, this.x + this.xOffset, next_y + this.yOffset);
         }
     }
 
@@ -346,6 +346,7 @@ export class JetrisGame {
             if (this.y == 0) {
                 this.stop();
                 this.pause = () => { return false; };
+                this.showGameOver();
                 this.playSound(JetrisGame.Sounds.GAME_OVER);
                 window.alert('Game Over');
                 return;
@@ -367,6 +368,18 @@ export class JetrisGame {
         }
     }
 
+    showGameOver() {
+        const w = this.bgImage.width;
+        const h = this.bgImage.height;
+        this.ctx.fillStyle = "rgba(5, 7, 13, 0.78)";
+        this.ctx.fillRect(0, 0, w, h);
+        this.ctx.textAlign = "center";
+        this.ctx.textBaseline = "middle";
+        this.ctx.font = "26px 'Seven Segment', monospace";
+        this.ctx.fillStyle = "#e879f9";
+        this.ctx.fillText("GAME OVER", w / 2, h / 2);
+    }
+
     stop() {
         if (this.refreshIntervalHandler)
             clearInterval(this.refreshIntervalHandler);
@@ -379,6 +392,7 @@ export class JetrisGame {
             return false;
         }
         this.ctx.drawImage(this.bgImage, 0, 0);
+        this.ctx.drawImage(this.offScreenCanvas.canvas, 0, 0);
     }
 
     mute() {
